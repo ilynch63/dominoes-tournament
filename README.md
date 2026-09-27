@@ -37,12 +37,12 @@ See [the registration guide](docs/registration.md) for a short event-day checkli
 
 - Exactly four played qualifying matches per player, with changing partners and no repeated teammates. The scheduler minimizes repeated tablemates.
 - Each table has two teams of two. With an uneven headcount, byes rotate as evenly as possible. With more players than seats, rounds are split into waves.
-- A match ends when one team reaches 100 or more. Both teammates receive their team's entire final score, including points above 100.
+- Qualifying, quarterfinals, and semifinals end when one team reaches 100 or more; the championship final ends at 120 or more. Both teammates receive their team's entire final score, including points above 100.
 - Standings use **win percentage**, then **average points per played match**, then a **saved random draw**. Byes count as neither matches nor points.
 - Every player plays exactly four qualifying matches. Players who reach four are not scheduled again. The last round may use fewer tables, only for players still needing a game.
 - The top 16 individual players become eight fixed teams: **1+2, 3+4, 5+6, 7+8, 9+10, 11+12, 13+14, and 15+16**.
 - Three playoff rounds: quarterfinals, semifinals, and the championship final. Quarterfinals are **A: (1+2) vs (15+16)**, **B: (7+8) vs (9+10)**, **C: (3+4) vs (13+14)**, and **D: (5+6) vs (11+12)**.
-- Winners of A/B and C/D meet in the semifinals, then semifinal winners play the final. Keep the same partners throughout; scores start at zero each match.
+- Winners of A/B and C/D meet in the semifinals, then semifinal winners play the final. Keep the same partners throughout; scores start at zero each match. In the championship final, the winning score must be at least 120 and the losing score below 120.
 
 The progress counter shows completed qualifying **rounds out of the scheduled total**, not the total number of table games. For 24 players the total is four rounds. Uneven headcounts usually need five rounds; 11 players need six.
 

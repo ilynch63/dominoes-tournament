@@ -72,7 +72,7 @@ function rebalance(state){
  const kept=state.rounds.map(r=>{const matches=r.matches.filter(m=>m.score),active=new Set(matches.flatMap(m=>m.teams.flat()));return {matches,byes:Array.from({length:n},(_,i)=>i).filter(i=>!active.has(i))};}).filter(r=>r.matches.length);
  return schedule(n,state.tables,kept);
 }
-function validScore(a,b){return Number.isSafeInteger(a)&&Number.isSafeInteger(b)&&a>=0&&b>=0&&Math.max(a,b)>=100&&Math.min(a,b)<100&&Math.max(a,b)<=1000000;}
+function validScore(a,b,target=100){return Number.isSafeInteger(a)&&Number.isSafeInteger(b)&&a>=0&&b>=0&&Math.max(a,b)>=target&&Math.min(a,b)<target&&Math.max(a,b)<=1000000;}
 function compare(a,b){return b.wins*a.played-a.wins*b.played || b.points*a.played-a.points*b.played;}
 function standings(state){
  const rows=state.players.map((name,id)=>({id,name,wins:0,points:0,played:0,byes:0}));
@@ -101,7 +101,9 @@ function playoffBracket(seeds,pairing='adjacent'){
  return {pairing,quarters:[[1,8],[4,5],[2,7],[3,6]].map(ranks=>({teams:ranks.map(team),score:null})),semis:[null,null],final:null};
 }
 const winner=m=>m.teams[m.score[0]>m.score[1]?0:1];
-function syncFinal(p){if(p.semis.every(m=>m?.score))p.final={teams:p.semis.map(winner),score:null};else p.final=null;}
+// Completed finals without a target were saved under the original 100-point rule.
+const finalTarget=p=>p.final?.target??(p.final?.score?100:120);
+function syncFinal(p){if(p.semis.every(m=>m?.score))p.final={teams:p.semis.map(winner),score:null,target:120};else p.final=null;}
 function syncQuarter(p,index){
  const semi=Math.floor(index/2),matches=p.quarters.slice(semi*2,semi*2+2);
  p.semis[semi]=matches.every(m=>m.score)?{teams:matches.map(winner),score:null}:null;
@@ -111,7 +113,7 @@ function validate(s){
  if(!s||![1,2,3].includes(s.version)||!Array.isArray(s.players)||s.players.length<8||s.players.length>48||s.players.some(n=>typeof n!=='string'||!n.trim()||n.length>70)||new Set(s.players.map(n=>n.trim().toLowerCase())).size!==s.players.length)throw Error('Invalid player list in backup.');
  if(typeof s.title!=='string'||s.title.length>100||!Number.isInteger(s.tables)||s.tables<1||s.tables>12||!Array.isArray(s.rounds)||(s.version<3?![0,s.version===1?3:requiredRounds(s.players.length)].includes(s.rounds.length):s.rounds.length>s.players.length))throw Error('Invalid event settings.');
  const n=s.players.length,partner=new Set(),byeCount=Array(n).fill(0);
- function match(m){if(!m||!Array.isArray(m.teams)||m.teams.length!==2||m.teams.some(t=>!Array.isArray(t)||t.length!==2)||new Set(m.teams.flat()).size!==4||m.teams.flat().some(i=>!Number.isInteger(i)||i<0||i>=n)||!(m.score===null||(Array.isArray(m.score)&&m.score.length===2&&validScore(...m.score))))throw Error('Invalid match in backup.');}
+ function match(m,target=100){if(!m||!Array.isArray(m.teams)||m.teams.length!==2||m.teams.some(t=>!Array.isArray(t)||t.length!==2)||new Set(m.teams.flat()).size!==4||m.teams.flat().some(i=>!Number.isInteger(i)||i<0||i>=n)||!(m.score===null||(Array.isArray(m.score)&&m.score.length===2&&validScore(...m.score,target))))throw Error('Invalid match in backup.');}
  for(const r of s.rounds){if(!Array.isArray(r.byes)||!Array.isArray(r.matches)||(s.version<3&&(r.byes.length!==n%4||r.matches.length!==Math.floor(n/4)))||r.matches.length<1||r.matches.length>Math.floor(n/4))throw Error('Invalid round in backup.');const seen=r.byes.slice();
    r.byes.forEach(i=>{if(!Number.isInteger(i)||i<0||i>=n)throw Error('Invalid bye.');byeCount[i]++;});
    for(const m of r.matches){match(m);if(!Number.isInteger(m.table)||m.table<1||m.table>s.tables||!Number.isInteger(m.wave)||m.wave<1)throw Error('Invalid table.');seen.push(...m.teams.flat());for(const t of m.teams){const k=key(...t);if(partner.has(k))throw Error('Repeated partner in backup.');partner.add(k);}}
@@ -123,8 +125,8 @@ function validate(s){
  const legacyComplete=s.version<3&&s.rounds.length>0&&s.rounds.every(r=>r.matches.every(m=>m.score));
  if(s.playoffs){const p=s.playoffs;if(!(complete(s)||legacyComplete)||!Array.isArray(p.seeds)||p.seeds.length!==n||new Set(p.seeds).size!==n||p.seeds.some(i=>!Number.isInteger(i)||i<0||i>=n)||!Array.isArray(p.draws)||!Array.isArray(p.semis)||p.semis.length!==2)throw Error('Invalid playoffs.');
    const rows=standings({...s,playoffs:null}),byId=Object.fromEntries(rows.map(r=>[r.id,r]));for(let i=1;i<n;i++)if(compare(byId[p.seeds[i-1]],byId[p.seeds[i]])>0)throw Error('Invalid seeding order.');
-   function nextMatch(m,previous,label){
-     if(previous.every(m=>m?.score)){match(m);if(JSON.stringify(m.teams)!==JSON.stringify(previous.map(winner)))throw Error(`Invalid ${label} teams.`);}
+   function nextMatch(m,previous,label,target=100){
+     if(previous.every(m=>m?.score)){match(m,target);if(JSON.stringify(m.teams)!==JSON.stringify(previous.map(winner)))throw Error(`Invalid ${label} teams.`);}
      else if(m!==null)throw Error(`Unexpected ${label}.`);
    }
    if(Object.hasOwn(p,'quarters')){
@@ -137,10 +139,11 @@ function validate(s){
      p.semis.forEach((m,i)=>{match(m);if(JSON.stringify(m.teams)!==JSON.stringify(expected[i]))throw Error('Invalid semifinal teams.');});
    }
    p.draws.forEach(d=>{if(!Number.isInteger(d.firstRank)||!Array.isArray(d.order)||d.order.length<2||JSON.stringify(p.seeds.slice(d.firstRank-1,d.firstRank-1+d.order.length))!==JSON.stringify(d.order))throw Error('Invalid draw record.');});
-   nextMatch(p.final,p.semis,'final');
+   if(p.final?.target!==undefined&&p.final.target!==120)throw Error('Invalid championship target.');
+   nextMatch(p.final,p.semis,'final',finalTarget(p));
  }
  return s;
 }
-const api={MIN_MATCHES,requiredRounds,scheduledCounts,needsExtension,shuffle,schedule,rebalance,validScore,compare,standings,complete,createPlayoffs,playoffBracket,syncQuarter,syncFinal,validate};
+const api={MIN_MATCHES,requiredRounds,scheduledCounts,needsExtension,shuffle,schedule,rebalance,validScore,compare,standings,complete,createPlayoffs,playoffBracket,syncQuarter,syncFinal,finalTarget,validate};
 if(typeof module!=='undefined')module.exports=api;else root.Domino=api;
 })(typeof window!=='undefined'?window:globalThis);

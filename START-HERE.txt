@@ -20,7 +20,9 @@ add/remove/reorder participants without starting a new event. Do not shuffle the
 name list after play begins: results belong to the corresponding roster slots.
 
 PLAY AND SCORE
-Every match is a race to 100 or more. Enter the final score for both teams.
+Qualifying, quarterfinals, and semifinals are races to 100 or more.
+The championship final is a race to 120 or more; the losing score must be below 120.
+Enter the final score for both teams.
 Overshoots count in full; both teammates receive the entire team score.
 Rounds use up to floor(players / 4) matches. Players not scheduled sit out.
 The final round only includes players who still need games; nobody plays a fifth.

@@ -32,16 +32,21 @@ for(let n=8;n<=48;n++){
  assert.deepEqual(p.semis[1].teams,[p.quarters[2].teams[0],p.quarters[3].teams[1]]);
  p.semis[0].score=[108,75];D.syncFinal(p);assert.equal(p.final,null);D.validate(s);
  p.semis[1].score=[91,111];D.syncFinal(p);assert.deepEqual(p.final.teams,[p.semis[0].teams[0],p.semis[1].teams[1]]);
- p.final.score=[100,75];D.validate(JSON.parse(JSON.stringify(s)));
+ assert.equal(p.final.target,120);assert.equal(D.finalTarget(p),120);
+ p.final.score=[119,80];assert.throws(()=>D.validate(s));p.final.score=[120,120];assert.throws(()=>D.validate(s));
+ p.final.score=[120,119];D.validate(JSON.parse(JSON.stringify(s)));
  const otherSemi=JSON.stringify(p.semis[1]);p.quarters[0].score=[70,100];D.syncQuarter(p,0);
  assert.equal(p.semis[0].score,null);assert.equal(p.final,null);assert.equal(JSON.stringify(p.semis[1]),otherSemi);D.validate(s);
  assert.deepEqual(p.semis[0].teams[0],p.quarters[0].teams[1]);
- p.semis[0].score=[100,0];D.syncFinal(p);p.final.score=[100,80];p.semis[1].score=[100,70];D.syncFinal(p);assert.equal(p.final.score,null);D.validate(s);
+ p.semis[0].score=[100,0];D.syncFinal(p);p.final.score=[125,110];p.semis[1].score=[100,70];D.syncFinal(p);assert.equal(p.final.score,null);D.validate(s);
  const corrupt=JSON.parse(JSON.stringify(s));corrupt.playoffs.quarters[0].teams.reverse();assert.throws(()=>D.validate(corrupt));
  const missing=JSON.parse(JSON.stringify(s));missing.playoffs.semis[0]=null;assert.throws(()=>D.validate(missing));
  const wrongFinal=JSON.parse(JSON.stringify(s));wrongFinal.playoffs.final.teams.reverse();assert.throws(()=>D.validate(wrongFinal));
  schedules++;
 }
+assert(D.validScore(120,119,120));assert(D.validScore(110,125,120));assert(D.validScore(0,120,120));
+for(const score of [[119,80],[120,120],[125,121],[-1,120],[120.5,0],[Infinity,0]])assert(!D.validScore(...score,120));
+assert(!D.validScore(120,110),'earlier rounds still require a loser below 100');
 assert(D.validScore(108,75));assert(D.validScore(0,100));for(const pair of [[100,100],[99,75],[-1,100],[100.1,75],[Infinity,0]])assert(!D.validScore(...pair));
 assert(D.compare({wins:2,played:2,points:205},{wins:2,played:3,points:300})<0,'win percentage has priority');
 assert.equal(D.compare({wins:2,played:2,points:210},{wins:3,played:3,points:315}),0,'exact ratio ties');
@@ -67,7 +72,8 @@ const snapshot=JSON.stringify(playedFive);assert.throws(()=>D.rebalance(playedFi
 const oneTable={...tied,players:tied.players.slice(0,8),rounds:D.schedule(8,1),tables:1,playoffs:null};D.validate(oneTable);assert(oneTable.rounds.every(r=>r.matches.every(m=>m.table===1)&&r.matches[1].wave===2));
 const old=JSON.parse(JSON.stringify(tied)),seeds=old.playoffs.seeds;
 old.playoffs={...old.playoffs,semis:[{teams:[[seeds[0],seeds[7]],[seeds[3],seeds[4]]],score:[100,70]},{teams:[[seeds[1],seeds[6]],[seeds[2],seeds[5]]],score:[70,100]}],final:null};
-delete old.playoffs.quarters;D.syncFinal(old.playoffs);old.playoffs.final.score=[100,80];D.validate(old);
+delete old.playoffs.quarters;D.syncFinal(old.playoffs);delete old.playoffs.final.target;old.playoffs.final.score=[100,80];D.validate(old);
+assert.equal(D.finalTarget(old.playoffs),100);old.playoffs.final.score=null;assert.equal(D.finalTarget(old.playoffs),120);D.validate(old);D.syncFinal(old.playoffs);assert.equal(old.playoffs.final.target,120);
 const draw=JSON.stringify(old.playoffs.draws);Object.assign(old.playoffs,D.playoffBracket(seeds));D.validate(old);assert.equal(JSON.stringify(old.playoffs.draws),draw);assert.deepEqual(old.playoffs.seeds,seeds);
 const previous=JSON.parse(JSON.stringify(tied));Object.assign(previous.playoffs,D.playoffBracket(previous.playoffs.seeds,'high-low'));delete previous.playoffs.pairing;
 D.validate(previous);previous.playoffs.quarters.forEach((m,i)=>{m.score=[100,70];D.syncQuarter(previous.playoffs,i);});D.validate(previous);

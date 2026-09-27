@@ -56,8 +56,8 @@ para('Partners rotate each round. The organizer assigns a randomized, prepared s
      'The last round uses only the tables needed for players still short of four. With 24 players, play four rounds.')
 
 heading('2  MATCH SCORING')
-para('Play successive hands until one team reaches <b>100 or more points</b>. That team wins the match. '
-     'The race to 100 counts as one match; individual hands do not count as separate match wins.')
+para('Play to <b>100 or more points</b> in qualifying, quarterfinals, and semifinals; play to <b>120 or more</b> in the championship final. That team wins the match. '
+     'Each race counts as one match; individual hands do not count as separate match wins.')
 para('Both teammates receive their team\'s <b>full final score</b> toward their individual qualifying totals. '
      'Points above 100 count in full. Each winning player also receives one match win; losing players keep '
      'their points but receive no win. Scores reset to zero for each new match.')
@@ -79,7 +79,7 @@ para('<b>Quarterfinals:</b> A: (1+2) vs (15+16); B: (7+8) vs (9+10); '
      'C: (3+4) vs (13+14); D: (5+6) vs (11+12). '
      '<b>Semifinal A:</b> winners of A/B. <b>Semifinal B:</b> winners of C/D.', gap=6)
 para('The semifinal winners meet in the final. Teams keep the same partners for all three playoff rounds. '
-     'Each playoff match is a fresh race to <b>100 or more points</b>; qualifying wins and points do not carry '
+     'Quarterfinals and semifinals are races to <b>100</b>; the championship final is a race to <b>120</b>. Scores reset for every match; qualifying wins and points do not carry '
      'into playoff scores. One loss eliminates a team. The team that wins the final is the tournament champion.')
 
 heading('5  GAMEPLAY RULES')
@@ -99,6 +99,6 @@ c.save()
 reader = PdfReader(OUT)
 assert len(reader.pages) == 1
 text = reader.pages[0].extract_text()
-for expected in ['108-75', 'public random draw', '1+2', '15+16', '3+4', '13+14', 'Quarterfinals', 'three playoff rounds', 'win percentage']:
+for expected in ['108-75', 'public random draw', '1+2', '15+16', '3+4', '13+14', 'Quarterfinals', 'three playoff rounds', 'win percentage', '120']:
     assert expected in text, expected
 print(f'Created and text-checked: {OUT}; bottom of content: {y:.1f} pt')
