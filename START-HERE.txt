@@ -11,7 +11,7 @@ Use Export backup / Restore backup to move between them.
 
 REGISTRATION
 1. Set the event name and available table count (default: six).
-2. Adjust the number of players (8-48), then click Apply count.
+2. Adjust the number of players (16-48), then click Apply count.
 3. Replace Player 1, Player 2, etc. with names, one per line. Use unique names.
 4. Click Save names. When registration closes, click Generate qualifying rounds.
 5. Print all rounds and the updated rules from inside the app.
@@ -44,9 +44,15 @@ PLAYOFFS
 Finish all scheduled qualifying rounds. Every player must have played exactly four matches. Review all results in Standings.
 Publicly click Draw ties & create playoffs. Exact ties are randomly resolved once;
 the saved draw record appears in Standings. Refreshing never repeats the draw.
-Top eight: semifinal A is (1+8) vs (4+5); semifinal B is (2+7) vs (3+6).
-The two winners play the final, with the same partners and scores starting at zero.
+Top sixteen form eight teams: 1+2, 3+4, 5+6, 7+8, 9+10, 11+12, 13+14, 15+16.
+Quarterfinals: A (1+2) vs (15+16); B (7+8) vs (9+10);
+C (3+4) vs (13+14); D (5+6) vs (11+12).
+Winners of A/B and C/D play semifinals; those winners play the final.
+Keep the same partners for all three rounds; scores start at zero each match.
+At least 16 players are required. Existing brackets can use Expand to 16 players
+to keep the saved qualifying order while replacing the bracket and its results.
 Correcting a qualifying result after the cut clears playoffs after a confirmation.
+Correcting a quarterfinal rebuilds its semifinal and the final; other results stay.
 Correcting a semifinal rebuilds the final and may clear its result after confirmation.
 
 BACKUPS

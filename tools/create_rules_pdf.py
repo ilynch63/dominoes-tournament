@@ -25,9 +25,9 @@ c.setFillColor(colors.HexColor('#EEF1F3'))
 c.roundRect(42, 665, 528, 29, 4, fill=1, stroke=0)
 c.setFillColor(ink)
 c.setFont('Helvetica-Bold', 10)
-c.drawCentredString(306, 676, '4 GAMES EACH   /   ROTATING PARTNERS   /   TOP 8 PLAYERS ADVANCE')
+c.drawCentredString(306, 676, '4 GAMES EACH   /   ROTATING PARTNERS   /   TOP 16 PLAYERS ADVANCE')
 
-body = ParagraphStyle('body', fontName='Helvetica', fontSize=10.5, leading=14.2,
+body = ParagraphStyle('body', fontName='Helvetica', fontSize=10, leading=13.2,
                       textColor=ink, spaceAfter=0)
 y = 647
 
@@ -71,12 +71,14 @@ para('After all scheduled rounds are complete and everyone has played exactly fo
      'display numbers. With equal matches played, this is equivalent to wins, then total points.')
 para('The organizer runs the tracker\'s random draw publicly after confirming all qualifying scores. '
      'The drawn order assigns the tied players\' ranks and is saved; refreshing does not redraw.')
-para('The <b>top eight individual players</b> qualify and are seeded 1 through 8. They form four fixed teams: '
-     '<b>1+8, 2+7, 3+6, and 4+5</b>. All other players do not advance.')
+para('The <b>top sixteen individual players</b> qualify and are seeded 1 through 16. They form eight fixed teams: '
+     '<b>1+2, 3+4, 5+6, 7+8, 9+10, 11+12, 13+14, and 15+16</b>. All other players do not advance.')
 
-heading('4  SEMIFINALS & FINAL')
-para('<b>Semifinal A:</b> (1+8) vs (4+5) &nbsp;&nbsp;&nbsp;&nbsp; <b>Semifinal B:</b> (2+7) vs (3+6)', gap=6)
-para('The semifinal winners meet in the final. Teams keep the same partners for both playoff rounds. '
+heading('4  THREE-ROUND PLAYOFFS')
+para('<b>Quarterfinals:</b> A: (1+2) vs (15+16); B: (7+8) vs (9+10); '
+     'C: (3+4) vs (13+14); D: (5+6) vs (11+12). '
+     '<b>Semifinal A:</b> winners of A/B. <b>Semifinal B:</b> winners of C/D.', gap=6)
+para('The semifinal winners meet in the final. Teams keep the same partners for all three playoff rounds. '
      'Each playoff match is a fresh race to <b>100 or more points</b>; qualifying wins and points do not carry '
      'into playoff scores. One loss eliminates a team. The team that wins the final is the tournament champion.')
 
@@ -97,6 +99,6 @@ c.save()
 reader = PdfReader(OUT)
 assert len(reader.pages) == 1
 text = reader.pages[0].extract_text()
-for expected in ['108-75', 'public random draw', '1+8', '2+7', 'win percentage']:
+for expected in ['108-75', 'public random draw', '1+2', '15+16', '3+4', '13+14', 'Quarterfinals', 'three playoff rounds', 'win percentage']:
     assert expected in text, expected
 print(f'Created and text-checked: {OUT}; bottom of content: {y:.1f} pt')

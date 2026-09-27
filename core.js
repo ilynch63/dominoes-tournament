@@ -85,16 +85,28 @@ function standings(state){
 }
 const complete=s=>s.rounds.length>0&&s.rounds.every(r=>r.matches.every(m=>m.score))&&standings(s).every(p=>p.played===MIN_MATCHES);
 function createPlayoffs(state){
+ if(state.players.length<16)throw Error('At least 16 players are required for the three-round playoffs.');
  if(!complete(state))throw Error('Finish all qualifying matches; every player must play exactly four before playoffs.');
  const rows=standings({...state,playoffs:null}),seeds=[],draws=[];
  for(let i=0;i<rows.length;){let j=i+1;while(j<rows.length&&compare(rows[i],rows[j])===0)j++;
    const group=rows.slice(i,j).map(p=>p.id),order=group.length>1?shuffle(group):group;
    if(group.length>1)draws.push({firstRank:i+1,order});seeds.push(...order);i=j;
  }
- const pair=(a,b)=>[seeds[a-1],seeds[b-1]];
- return {seeds,draws,created:new Date().toISOString(),semis:[{teams:[pair(1,8),pair(4,5)],score:null},{teams:[pair(2,7),pair(3,6)],score:null}],final:null};
+ return {...playoffBracket(seeds),seeds,draws,created:new Date().toISOString()};
 }
-function syncFinal(p){if(p.semis.every(m=>m.score))p.final={teams:p.semis.map(m=>m.teams[m.score[0]>m.score[1]?0:1]),score:null};else p.final=null;}
+function playoffBracket(seeds,pairing='adjacent'){
+ if(seeds.length<16)throw Error('At least 16 players are required for the three-round playoffs.');
+ if(!['adjacent','high-low'].includes(pairing))throw Error('Invalid playoff pairing format.');
+ const team=rank=>pairing==='adjacent'?[seeds[2*rank-2],seeds[2*rank-1]]:[seeds[rank-1],seeds[16-rank]];
+ return {pairing,quarters:[[1,8],[4,5],[2,7],[3,6]].map(ranks=>({teams:ranks.map(team),score:null})),semis:[null,null],final:null};
+}
+const winner=m=>m.teams[m.score[0]>m.score[1]?0:1];
+function syncFinal(p){if(p.semis.every(m=>m?.score))p.final={teams:p.semis.map(winner),score:null};else p.final=null;}
+function syncQuarter(p,index){
+ const semi=Math.floor(index/2),matches=p.quarters.slice(semi*2,semi*2+2);
+ p.semis[semi]=matches.every(m=>m.score)?{teams:matches.map(winner),score:null}:null;
+ syncFinal(p);
+}
 function validate(s){
  if(!s||![1,2,3].includes(s.version)||!Array.isArray(s.players)||s.players.length<8||s.players.length>48||s.players.some(n=>typeof n!=='string'||!n.trim()||n.length>70)||new Set(s.players.map(n=>n.trim().toLowerCase())).size!==s.players.length)throw Error('Invalid player list in backup.');
  if(typeof s.title!=='string'||s.title.length>100||!Number.isInteger(s.tables)||s.tables<1||s.tables>12||!Array.isArray(s.rounds)||(s.version<3?![0,s.version===1?3:requiredRounds(s.players.length)].includes(s.rounds.length):s.rounds.length>s.players.length))throw Error('Invalid event settings.');
@@ -111,14 +123,24 @@ function validate(s){
  const legacyComplete=s.version<3&&s.rounds.length>0&&s.rounds.every(r=>r.matches.every(m=>m.score));
  if(s.playoffs){const p=s.playoffs;if(!(complete(s)||legacyComplete)||!Array.isArray(p.seeds)||p.seeds.length!==n||new Set(p.seeds).size!==n||p.seeds.some(i=>!Number.isInteger(i)||i<0||i>=n)||!Array.isArray(p.draws)||!Array.isArray(p.semis)||p.semis.length!==2)throw Error('Invalid playoffs.');
    const rows=standings({...s,playoffs:null}),byId=Object.fromEntries(rows.map(r=>[r.id,r]));for(let i=1;i<n;i++)if(compare(byId[p.seeds[i-1]],byId[p.seeds[i]])>0)throw Error('Invalid seeding order.');
-   const expected=[[[p.seeds[0],p.seeds[7]],[p.seeds[3],p.seeds[4]]],[[p.seeds[1],p.seeds[6]],[p.seeds[2],p.seeds[5]]]];
-   p.semis.forEach((m,i)=>{match(m);if(JSON.stringify(m.teams)!==JSON.stringify(expected[i]))throw Error('Invalid semifinal teams.');});
+   function nextMatch(m,previous,label){
+     if(previous.every(m=>m?.score)){match(m);if(JSON.stringify(m.teams)!==JSON.stringify(previous.map(winner)))throw Error(`Invalid ${label} teams.`);}
+     else if(m!==null)throw Error(`Unexpected ${label}.`);
+   }
+   if(Object.hasOwn(p,'quarters')){
+     if(n<16||!Array.isArray(p.quarters)||p.quarters.length!==4)throw Error('Invalid quarterfinals.');
+     const expected=playoffBracket(p.seeds,p.pairing===undefined?'high-low':p.pairing).quarters;
+     p.quarters.forEach((m,i)=>{match(m);if(JSON.stringify(m.teams)!==JSON.stringify(expected[i].teams))throw Error('Invalid quarterfinal teams.');});
+     p.semis.forEach((m,i)=>nextMatch(m,p.quarters.slice(i*2,i*2+2),'semifinal'));
+   }else{
+     const expected=[[[p.seeds[0],p.seeds[7]],[p.seeds[3],p.seeds[4]]],[[p.seeds[1],p.seeds[6]],[p.seeds[2],p.seeds[5]]]];
+     p.semis.forEach((m,i)=>{match(m);if(JSON.stringify(m.teams)!==JSON.stringify(expected[i]))throw Error('Invalid semifinal teams.');});
+   }
    p.draws.forEach(d=>{if(!Number.isInteger(d.firstRank)||!Array.isArray(d.order)||d.order.length<2||JSON.stringify(p.seeds.slice(d.firstRank-1,d.firstRank-1+d.order.length))!==JSON.stringify(d.order))throw Error('Invalid draw record.');});
-   if(p.final){match(p.final);if(!p.semis.every(m=>m.score)||JSON.stringify(p.final.teams)!==JSON.stringify(p.semis.map(m=>m.teams[m.score[0]>m.score[1]?0:1])))throw Error('Invalid final teams.');}
-   else if(p.semis.every(m=>m.score))throw Error('Missing final.');
+   nextMatch(p.final,p.semis,'final');
  }
  return s;
 }
-const api={MIN_MATCHES,requiredRounds,scheduledCounts,needsExtension,shuffle,schedule,rebalance,validScore,compare,standings,complete,createPlayoffs,syncFinal,validate};
+const api={MIN_MATCHES,requiredRounds,scheduledCounts,needsExtension,shuffle,schedule,rebalance,validScore,compare,standings,complete,createPlayoffs,playoffBracket,syncQuarter,syncFinal,validate};
 if(typeof module!=='undefined')module.exports=api;else root.Domino=api;
 })(typeof window!=='undefined'?window:globalThis);

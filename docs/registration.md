@@ -24,7 +24,7 @@ Casey
 Jordan
 ```
 
-That is a formatting example; the event needs at least eight players. The maximum is 48.
+That is a formatting example; the event needs at least 16 players. The maximum is 48.
 
 ## Close registration
 

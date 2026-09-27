@@ -24,7 +24,7 @@ Registration is managed by the organizer on one computer. Players do not need ac
 
 1. Open the organizer view, without `?tv=1` at the end of its address.
 2. Select **Players**. Set your event name and available table count.
-3. Enter the final **Player count** (8–48), then click **Apply count**. Alternatively, paste the whole roster into the names field, one player per line.
+3. Enter the final **Player count** (16–48), then click **Apply count**. Alternatively, paste the whole roster into the names field, one player per line.
 4. Replace placeholders with names. Each name must be unique; add a last initial where needed.
 5. Click **Save names**. You can repeat these steps while people arrive.
 6. Once registration closes, click **Generate qualifying rounds** and confirm the headcount. This locks the roster size and creates the table assignments.
@@ -40,12 +40,13 @@ See [the registration guide](docs/registration.md) for a short event-day checkli
 - A match ends when one team reaches 100 or more. Both teammates receive their team's entire final score, including points above 100.
 - Standings use **win percentage**, then **average points per played match**, then a **saved random draw**. Byes count as neither matches nor points.
 - Every player plays exactly four qualifying matches. Players who reach four are not scheduled again. The last round may use fewer tables, only for players still needing a game.
-- The top eight individual players become four teams. Semifinals are **(1+8) vs (4+5)** and **(2+7) vs (3+6)**.
-- Winners meet in the final with the same partners. Playoff scores start at zero.
+- The top 16 individual players become eight fixed teams: **1+2, 3+4, 5+6, 7+8, 9+10, 11+12, 13+14, and 15+16**.
+- Three playoff rounds: quarterfinals, semifinals, and the championship final. Quarterfinals are **A: (1+2) vs (15+16)**, **B: (7+8) vs (9+10)**, **C: (3+4) vs (13+14)**, and **D: (5+6) vs (11+12)**.
+- Winners of A/B and C/D meet in the semifinals, then semifinal winners play the final. Keep the same partners throughout; scores start at zero each match.
 
 The progress counter shows completed qualifying **rounds out of the scheduled total**, not the total number of table games. For 24 players the total is four rounds. Uneven headcounts usually need five rounds; 11 players need six.
 
-Older events remain loadable. Select **Rebalance remaining matches** to replace unplayed pairings while preserving recorded matches and scores. Reprint the schedule afterward. Rebalancing downloads a backup and clears any old playoff bracket after confirmation. If results already include more than four games for a player, or the remaining games cannot form four-player tables, the app keeps the event unchanged and asks you to export a backup and start a new event. New playoffs require exactly four played qualifying games per player.
+Older events remain loadable. Select **Rebalance remaining matches** to replace unplayed pairings while preserving recorded matches and scores. Reprint the schedule afterward. Rebalancing downloads a backup and clears any old playoff bracket after confirmation. If results already include more than four games for a player, or the remaining games cannot form four-player tables, the app keeps the event unchanged and asks you to export a backup and start a new event. New playoffs require at least 16 players and exactly four played qualifying games per player. Existing brackets remain loadable. For a saved 16-player bracket with the previous partner pairings, use **Playoffs → Use adjacent-seed pairs** to rebuild it while retaining the qualifying order and draw; a backup is downloaded and playoff results are cleared after confirmation. Existing eight-player brackets remain loadable. Use **Playoffs → Expand to 16 players** to replace an old bracket after confirmation; a backup is downloaded, playoff results are cleared, and qualifying seeds and the saved draw are retained.
 
 ## Scores, TV display, and backups
 
