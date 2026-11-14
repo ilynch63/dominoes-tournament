@@ -57,3 +57,8 @@ body.tv{height:100vh;overflow:hidden}
 .tv-all-standings{display:grid;grid-template-columns:repeat(var(--standings-columns),minmax(0,1fr));gap:22px;align-items:start}
 .tv-all-standings .table-wrap{min-width:0}.tv .tv-all-standings th,.tv .tv-all-standings td{padding:8px}
 @media(max-height:850px){.tv-all-standings{gap:14px}.tv .tv-all-standings th,.tv .tv-all-standings td{padding:6px}}
+.bye-controls summary{cursor:pointer;font-weight:700}
+.bye-controls select{display:block;margin-top:6px;width:100%;min-width:0}
+.bye-controls .fieldrow{flex-wrap:wrap}
+.bye-controls .fieldrow>label{min-width:200px}
+.bye-controls select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}

@@ -1,0 +1,1511 @@
+{
+  "source": "Domino -- Wednesday Group.xlsm",
+  "players": [
+    {
+      "name": "Georges",
+      "points": 6548,
+      "average": 83.94871794871794,
+      "played": 78,
+      "wins": 44,
+      "losses": 34,
+      "winRate": 0.5641025641025641,
+      "winAverage": 113.25,
+      "lossAverage": 46.029411764705884,
+      "rating": 385.4433257918552
+    },
+    {
+      "name": "Gustavo",
+      "points": 2653,
+      "average": 69.8157894736842,
+      "played": 38,
+      "wins": 11,
+      "losses": 27,
+      "winRate": 0.2894736842105263,
+      "winAverage": 113.27272727272727,
+      "lossAverage": 52.111111111111114,
+      "rating": 184.1686469962786
+    },
+    {
+      "name": "Irving",
+      "points": 7832,
+      "average": 86.06593406593407,
+      "played": 91,
+      "wins": 48,
+      "losses": 43,
+      "winRate": 0.5274725274725275,
+      "winAverage": 114.66666666666667,
+      "lossAverage": 54.13953488372093,
+      "rating": 451.645455319874
+    },
+    {
+      "name": "Tuto",
+      "points": 3321,
+      "average": 79.07142857142857,
+      "played": 42,
+      "wins": 18,
+      "losses": 24,
+      "winRate": 0.42857142857142855,
+      "winAverage": 111.94444444444444,
+      "lossAverage": 54.416666666666664,
+      "rating": 222.32896825396827
+    },
+    {
+      "name": "Victor",
+      "points": 5791,
+      "average": 79.32876712328768,
+      "played": 73,
+      "wins": 37,
+      "losses": 36,
+      "winRate": 0.5068493150684932,
+      "winAverage": 112.02702702702703,
+      "lossAverage": 45.72222222222222,
+      "rating": 345.1160208153359
+    },
+    {
+      "name": "Waldemar",
+      "points": 6571,
+      "average": 82.1375,
+      "played": 80,
+      "wins": 43,
+      "losses": 37,
+      "winRate": 0.5375,
+      "winAverage": 112.76744186046511,
+      "lossAverage": 46.54054054054054,
+      "rating": 385.68392324010057
+    }
+  ],
+  "pairs": [
+    {
+      "name": "Georges + Gustavo",
+      "points": 506,
+      "average": 63.25,
+      "played": 8,
+      "wins": 2,
+      "losses": 6,
+      "winRate": 0.25,
+      "winAverage": 122,
+      "lossAverage": 43.666666666666664,
+      "rating": 73.55416666666666
+    },
+    {
+      "name": "Georges + Irving",
+      "points": 2081,
+      "average": 90.47826086956522,
+      "played": 23,
+      "wins": 15,
+      "losses": 8,
+      "winRate": 0.6521739130434783,
+      "winAverage": 115.73333333333333,
+      "lossAverage": 43.125,
+      "rating": 165.3380072463768
+    },
+    {
+      "name": "Georges + Tuto",
+      "points": 539,
+      "average": 89.83333333333333,
+      "played": 6,
+      "wins": 3,
+      "losses": 3,
+      "winRate": 0.5,
+      "winAverage": 109,
+      "lossAverage": 70.66666666666667,
+      "rating": 89.95833333333334
+    },
+    {
+      "name": "Georges + Victor",
+      "points": 1726,
+      "average": 86.3,
+      "played": 20,
+      "wins": 12,
+      "losses": 8,
+      "winRate": 0.6,
+      "winAverage": 109.83333333333333,
+      "lossAverage": 51,
+      "rating": 145.68333333333337
+    },
+    {
+      "name": "Georges + Waldemar",
+      "points": 1555,
+      "average": 81.84210526315789,
+      "played": 19,
+      "wins": 11,
+      "losses": 8,
+      "winRate": 0.5789473684210527,
+      "winAverage": 113.81818181818181,
+      "lossAverage": 37.875,
+      "rating": 133.9851076555024
+    },
+    {
+      "name": "Gustavo + Irving",
+      "points": 866,
+      "average": 72.16666666666667,
+      "played": 12,
+      "wins": 4,
+      "losses": 8,
+      "winRate": 0.3333333333333333,
+      "winAverage": 111,
+      "lossAverage": 52.75,
+      "rating": 95.84166666666667
+    },
+    {
+      "name": "Gustavo + Tuto",
+      "points": 195,
+      "average": 65,
+      "played": 3,
+      "wins": 0,
+      "losses": 3,
+      "winRate": 0,
+      "winAverage": null,
+      "lossAverage": 65,
+      "rating": 48.75
+    },
+    {
+      "name": "Gustavo + Victor",
+      "points": 593,
+      "average": 65.88888888888889,
+      "played": 9,
+      "wins": 3,
+      "losses": 6,
+      "winRate": 0.3333333333333333,
+      "winAverage": 110.66666666666667,
+      "lossAverage": 43.5,
+      "rating": 78.09444444444443
+    },
+    {
+      "name": "Gustavo + Waldemar",
+      "points": 493,
+      "average": 82.16666666666667,
+      "played": 6,
+      "wins": 2,
+      "losses": 4,
+      "winRate": 0.3333333333333333,
+      "winAverage": 113,
+      "lossAverage": 66.75,
+      "rating": 83.79166666666667
+    },
+    {
+      "name": "Irving + Tuto",
+      "points": 1006,
+      "average": 83.83333333333333,
+      "played": 12,
+      "wins": 5,
+      "losses": 7,
+      "winRate": 0.4166666666666667,
+      "winAverage": 115.4,
+      "lossAverage": 61.285714285714285,
+      "rating": 109.98940476190477
+    },
+    {
+      "name": "Irving + Victor",
+      "points": 1655,
+      "average": 87.10526315789474,
+      "played": 19,
+      "wins": 10,
+      "losses": 9,
+      "winRate": 0.5263157894736842,
+      "winAverage": 114.6,
+      "lossAverage": 56.55555555555556,
+      "rating": 143.54976608187135
+    },
+    {
+      "name": "Irving + Waldemar",
+      "points": 2175,
+      "average": 90.625,
+      "played": 24,
+      "wins": 14,
+      "losses": 10,
+      "winRate": 0.5833333333333334,
+      "winAverage": 114.35714285714286,
+      "lossAverage": 57.4,
+      "rating": 171.38404761904764
+    },
+    {
+      "name": "Tuto + Victor",
+      "points": 491,
+      "average": 70.14285714285714,
+      "played": 7,
+      "wins": 3,
+      "losses": 4,
+      "winRate": 0.42857142857142855,
+      "winAverage": 114,
+      "lossAverage": 37.25,
+      "rating": 74.85357142857143
+    },
+    {
+      "name": "Tuto + Waldemar",
+      "points": 1090,
+      "average": 77.85714285714286,
+      "played": 14,
+      "wins": 7,
+      "losses": 7,
+      "winRate": 0.5,
+      "winAverage": 109.85714285714286,
+      "lossAverage": 45.857142857142854,
+      "rating": 109.125
+    },
+    {
+      "name": "Victor + Waldemar",
+      "points": 1157,
+      "average": 72.3125,
+      "played": 16,
+      "wins": 8,
+      "losses": 8,
+      "winRate": 0.5,
+      "winAverage": 112.5,
+      "lossAverage": 32.125,
+      "rating": 108.59375
+    }
+  ],
+  "h2h": [
+    {
+      "mode": "players",
+      "a": "Georges",
+      "b": "Gustavo",
+      "value": "24 / 70.8% / 92.3"
+    },
+    {
+      "mode": "players",
+      "a": "Georges",
+      "b": "Irving",
+      "value": "44 / 50.0% / 77.6"
+    },
+    {
+      "mode": "players",
+      "a": "Georges",
+      "b": "Tuto",
+      "value": "16 / 75.0% / 98.7"
+    },
+    {
+      "mode": "players",
+      "a": "Georges",
+      "b": "Victor",
+      "value": "33 / 51.5% / 80.5"
+    },
+    {
+      "mode": "players",
+      "a": "Georges",
+      "b": "Waldemar",
+      "value": "37 / 51.4% / 83.5"
+    },
+    {
+      "mode": "players",
+      "a": "Gustavo",
+      "b": "Georges",
+      "value": "24 / 29.2% / 69.0"
+    },
+    {
+      "mode": "players",
+      "a": "Gustavo",
+      "b": "Irving",
+      "value": "21 / 23.8% / 64.4"
+    },
+    {
+      "mode": "players",
+      "a": "Gustavo",
+      "b": "Tuto",
+      "value": "5 / 20.0% / 76.6"
+    },
+    {
+      "mode": "players",
+      "a": "Gustavo",
+      "b": "Victor",
+      "value": "14 / 35.7% / 75.1"
+    },
+    {
+      "mode": "players",
+      "a": "Gustavo",
+      "b": "Waldemar",
+      "value": "12 / 33.3% / 72.0"
+    },
+    {
+      "mode": "players",
+      "a": "Irving",
+      "b": "Georges",
+      "value": "44 / 50.0% / 85.3"
+    },
+    {
+      "mode": "players",
+      "a": "Irving",
+      "b": "Gustavo",
+      "value": "21 / 76.2% / 101.1"
+    },
+    {
+      "mode": "players",
+      "a": "Irving",
+      "b": "Tuto",
+      "value": "23 / 52.2% / 87.3"
+    },
+    {
+      "mode": "players",
+      "a": "Irving",
+      "b": "Victor",
+      "value": "45 / 51.1% / 85.4"
+    },
+    {
+      "mode": "players",
+      "a": "Irving",
+      "b": "Waldemar",
+      "value": "45 / 46.7% / 80.1"
+    },
+    {
+      "mode": "players",
+      "a": "Tuto",
+      "b": "Georges",
+      "value": "16 / 25.0% / 70.5"
+    },
+    {
+      "mode": "players",
+      "a": "Tuto",
+      "b": "Gustavo",
+      "value": "5 / 80.0% / 102.0"
+    },
+    {
+      "mode": "players",
+      "a": "Tuto",
+      "b": "Irving",
+      "value": "23 / 47.8% / 76.0"
+    },
+    {
+      "mode": "players",
+      "a": "Tuto",
+      "b": "Victor",
+      "value": "15 / 46.7% / 82.7"
+    },
+    {
+      "mode": "players",
+      "a": "Tuto",
+      "b": "Waldemar",
+      "value": "25 / 40.0% / 80.7"
+    },
+    {
+      "mode": "players",
+      "a": "Victor",
+      "b": "Georges",
+      "value": "33 / 48.5% / 77.8"
+    },
+    {
+      "mode": "players",
+      "a": "Victor",
+      "b": "Gustavo",
+      "value": "14 / 64.3% / 84.0"
+    },
+    {
+      "mode": "players",
+      "a": "Victor",
+      "b": "Irving",
+      "value": "45 / 48.9% / 75.0"
+    },
+    {
+      "mode": "players",
+      "a": "Victor",
+      "b": "Tuto",
+      "value": "15 / 53.3% / 84.1"
+    },
+    {
+      "mode": "players",
+      "a": "Victor",
+      "b": "Waldemar",
+      "value": "37 / 48.6% / 82.8"
+    },
+    {
+      "mode": "players",
+      "a": "Waldemar",
+      "b": "Georges",
+      "value": "37 / 48.6% / 79.6"
+    },
+    {
+      "mode": "players",
+      "a": "Waldemar",
+      "b": "Gustavo",
+      "value": "12 / 66.7% / 82.1"
+    },
+    {
+      "mode": "players",
+      "a": "Waldemar",
+      "b": "Irving",
+      "value": "45 / 53.3% / 79.6"
+    },
+    {
+      "mode": "players",
+      "a": "Waldemar",
+      "b": "Tuto",
+      "value": "25 / 60.0% / 91.3"
+    },
+    {
+      "mode": "players",
+      "a": "Waldemar",
+      "b": "Victor",
+      "value": "37 / 51.4% / 81.5"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Gustavo",
+      "b": "Irving + Victor",
+      "value": "3 / 0.0% / 33.7"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Gustavo",
+      "b": "Irving + Waldemar",
+      "value": "4 / 25.0% / 70.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Gustavo",
+      "b": "Victor + Waldemar",
+      "value": "1 / 100.0% / 125.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Irving",
+      "b": "Gustavo + Tuto",
+      "value": "1 / 100.0% / 104.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Irving",
+      "b": "Gustavo + Victor",
+      "value": "8 / 75.0% / 106.5"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Irving",
+      "b": "Tuto + Waldemar",
+      "value": "4 / 75.0% / 97.3"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Irving",
+      "b": "Victor + Waldemar",
+      "value": "10 / 50.0% / 73.6"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Tuto",
+      "b": "Gustavo + Irving",
+      "value": "1 / 100.0% / 111.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Tuto",
+      "b": "Gustavo + Waldemar",
+      "value": "1 / 100.0% / 113.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Tuto",
+      "b": "Irving + Waldemar",
+      "value": "3 / 33.3% / 75.3"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Tuto",
+      "b": "Victor + Waldemar",
+      "value": "1 / 0.0% / 89.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Victor",
+      "b": "Gustavo + Irving",
+      "value": "7 / 57.1% / 71.9"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Victor",
+      "b": "Gustavo + Waldemar",
+      "value": "2 / 50.0% / 98.5"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Victor",
+      "b": "Irving + Tuto",
+      "value": "1 / 100.0% / 120.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Victor",
+      "b": "Irving + Waldemar",
+      "value": "8 / 50.0% / 84.9"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Victor",
+      "b": "Tuto + Waldemar",
+      "value": "1 / 100.0% / 115.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Waldemar",
+      "b": "Gustavo + Irving",
+      "value": "3 / 66.7% / 77.7"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Waldemar",
+      "b": "Gustavo + Tuto",
+      "value": "1 / 100.0% / 101.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Waldemar",
+      "b": "Irving + Tuto",
+      "value": "5 / 60.0% / 93.2"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Waldemar",
+      "b": "Irving + Victor",
+      "value": "6 / 50.0% / 73.8"
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Waldemar",
+      "b": "Tuto + Victor",
+      "value": "3 / 66.7% / 94.7"
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Irving",
+      "b": "Georges + Tuto",
+      "value": "1 / 0.0% / 40.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Irving",
+      "b": "Georges + Victor",
+      "value": "7 / 42.9% / 87.4"
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Irving",
+      "b": "Georges + Waldemar",
+      "value": "3 / 33.3% / 50.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Irving",
+      "b": "Tuto + Waldemar",
+      "value": "1 / 0.0% / 64.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Tuto",
+      "b": "Georges + Irving",
+      "value": "1 / 0.0% / 51.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Tuto",
+      "b": "Georges + Waldemar",
+      "value": "1 / 0.0% / 94.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Tuto",
+      "b": "Irving + Waldemar",
+      "value": "1 / 0.0% / 50.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Victor",
+      "b": "Georges + Irving",
+      "value": "8 / 25.0% / 61.5"
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Victor",
+      "b": "Irving + Waldemar",
+      "value": "1 / 100.0% / 101.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Waldemar",
+      "b": "Georges + Tuto",
+      "value": "1 / 0.0% / 70.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Waldemar",
+      "b": "Georges + Victor",
+      "value": "2 / 50.0% / 73.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Waldemar",
+      "b": "Irving + Tuto",
+      "value": "2 / 50.0% / 104.5"
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Waldemar",
+      "b": "Irving + Victor",
+      "value": "1 / 0.0% / 68.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Tuto",
+      "b": "Georges + Victor",
+      "value": "1 / 0.0% / 52.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Tuto",
+      "b": "Georges + Waldemar",
+      "value": "5 / 40.0% / 84.6"
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Tuto",
+      "b": "Gustavo + Waldemar",
+      "value": "2 / 50.0% / 91.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Tuto",
+      "b": "Victor + Waldemar",
+      "value": "4 / 50.0% / 87.3"
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Victor",
+      "b": "Georges + Gustavo",
+      "value": "3 / 100.0% / 114.7"
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Victor",
+      "b": "Georges + Waldemar",
+      "value": "6 / 50.0% / 88.3"
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Victor",
+      "b": "Gustavo + Waldemar",
+      "value": "1 / 100.0% / 113.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Victor",
+      "b": "Tuto + Waldemar",
+      "value": "8 / 37.5% / 80.4"
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Waldemar",
+      "b": "Georges + Gustavo",
+      "value": "4 / 75.0% / 88.8"
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Waldemar",
+      "b": "Georges + Tuto",
+      "value": "3 / 66.7% / 104.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Waldemar",
+      "b": "Georges + Victor",
+      "value": "8 / 50.0% / 85.8"
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Waldemar",
+      "b": "Gustavo + Tuto",
+      "value": "1 / 100.0% / 111.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Waldemar",
+      "b": "Gustavo + Victor",
+      "value": "1 / 0.0% / 62.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Waldemar",
+      "b": "Tuto + Victor",
+      "value": "4 / 50.0% / 86.5"
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Victor",
+      "b": "Georges + Waldemar",
+      "value": "3 / 33.3% / 71.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Victor",
+      "b": "Irving + Waldemar",
+      "value": "4 / 50.0% / 69.5"
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Waldemar",
+      "b": "Georges + Irving",
+      "value": "4 / 25.0% / 59.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Waldemar",
+      "b": "Georges + Victor",
+      "value": "1 / 0.0% / 59.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Waldemar",
+      "b": "Gustavo + Irving",
+      "value": "1 / 100.0% / 104.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Waldemar",
+      "b": "Irving + Victor",
+      "value": "8 / 62.5% / 86.4"
+    },
+    {
+      "mode": "pairs",
+      "a": "Victor + Waldemar",
+      "b": "Georges + Gustavo",
+      "value": "1 / 0.0% / 19.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Victor + Waldemar",
+      "b": "Georges + Irving",
+      "value": "10 / 50.0% / 75.4"
+    },
+    {
+      "mode": "pairs",
+      "a": "Victor + Waldemar",
+      "b": "Georges + Tuto",
+      "value": "1 / 100.0% / 108.0"
+    },
+    {
+      "mode": "pairs",
+      "a": "Victor + Waldemar",
+      "b": "Irving + Tuto",
+      "value": "4 / 50.0% / 69.0"
+    }
+  ],
+  "probabilities": [
+    {
+      "mode": "players",
+      "a": "Georges",
+      "b": "Gustavo",
+      "value": 0.7610837236741561
+    },
+    {
+      "mode": "players",
+      "a": "Georges",
+      "b": "Irving",
+      "value": 0.40586400719326454
+    },
+    {
+      "mode": "players",
+      "a": "Georges",
+      "b": "Tuto",
+      "value": 0.7188898820529971
+    },
+    {
+      "mode": "players",
+      "a": "Georges",
+      "b": "Victor",
+      "value": 0.5577764245397034
+    },
+    {
+      "mode": "players",
+      "a": "Georges",
+      "b": "Waldemar",
+      "value": 0.4996537524942588
+    },
+    {
+      "mode": "players",
+      "a": "Gustavo",
+      "b": "Georges",
+      "value": 0.23891627632584395
+    },
+    {
+      "mode": "players",
+      "a": "Gustavo",
+      "b": "Irving",
+      "value": 0.17657594167182725
+    },
+    {
+      "mode": "players",
+      "a": "Gustavo",
+      "b": "Tuto",
+      "value": 0.44530265473240743
+    },
+    {
+      "mode": "players",
+      "a": "Gustavo",
+      "b": "Victor",
+      "value": 0.2836378555920245
+    },
+    {
+      "mode": "players",
+      "a": "Gustavo",
+      "b": "Waldemar",
+      "value": 0.23866452729646837
+    },
+    {
+      "mode": "players",
+      "a": "Irving",
+      "b": "Georges",
+      "value": 0.5941359928067355
+    },
+    {
+      "mode": "players",
+      "a": "Irving",
+      "b": "Gustavo",
+      "value": 0.8234240583281728
+    },
+    {
+      "mode": "players",
+      "a": "Irving",
+      "b": "Tuto",
+      "value": 0.7891903265163334
+    },
+    {
+      "mode": "players",
+      "a": "Irving",
+      "b": "Victor",
+      "value": 0.6486778759851626
+    },
+    {
+      "mode": "players",
+      "a": "Irving",
+      "b": "Waldemar",
+      "value": 0.5938019749596211
+    },
+    {
+      "mode": "players",
+      "a": "Tuto",
+      "b": "Georges",
+      "value": 0.28111011794700286
+    },
+    {
+      "mode": "players",
+      "a": "Tuto",
+      "b": "Gustavo",
+      "value": 0.5546973452675926
+    },
+    {
+      "mode": "players",
+      "a": "Tuto",
+      "b": "Irving",
+      "value": 0.21080967348366664
+    },
+    {
+      "mode": "players",
+      "a": "Tuto",
+      "b": "Victor",
+      "value": 0.33030208514501413
+    },
+    {
+      "mode": "players",
+      "a": "Tuto",
+      "b": "Waldemar",
+      "value": 0.2808303139896309
+    },
+    {
+      "mode": "players",
+      "a": "Victor",
+      "b": "Georges",
+      "value": 0.4422235754602966
+    },
+    {
+      "mode": "players",
+      "a": "Victor",
+      "b": "Gustavo",
+      "value": 0.7163621444079755
+    },
+    {
+      "mode": "players",
+      "a": "Victor",
+      "b": "Irving",
+      "value": 0.3513221240148375
+    },
+    {
+      "mode": "players",
+      "a": "Victor",
+      "b": "Tuto",
+      "value": 0.6696979148549859
+    },
+    {
+      "mode": "players",
+      "a": "Victor",
+      "b": "Waldemar",
+      "value": 0.4418819785453551
+    },
+    {
+      "mode": "players",
+      "a": "Waldemar",
+      "b": "Georges",
+      "value": 0.5003462475057412
+    },
+    {
+      "mode": "players",
+      "a": "Waldemar",
+      "b": "Gustavo",
+      "value": 0.7613354727035316
+    },
+    {
+      "mode": "players",
+      "a": "Waldemar",
+      "b": "Irving",
+      "value": 0.40619802504037894
+    },
+    {
+      "mode": "players",
+      "a": "Waldemar",
+      "b": "Tuto",
+      "value": 0.7191696860103692
+    },
+    {
+      "mode": "players",
+      "a": "Waldemar",
+      "b": "Victor",
+      "value": 0.558118021454645
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Gustavo",
+      "b": "Irving + Tuto",
+      "value": 0.44775685213558136
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Gustavo",
+      "b": "Irving + Victor",
+      "value": 0.4006092859854568
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Gustavo",
+      "b": "Irving + Waldemar",
+      "value": 0.36281798476534755
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Gustavo",
+      "b": "Tuto + Victor",
+      "value": 0.49813001494722187
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Gustavo",
+      "b": "Tuto + Waldemar",
+      "value": 0.44898756698618936
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Gustavo",
+      "b": "Victor + Waldemar",
+      "value": 0.4497442565974075
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Irving",
+      "b": "Gustavo + Tuto",
+      "value": 0.661757150369592
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Irving",
+      "b": "Gustavo + Victor",
+      "value": 0.6229795628521024
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Irving",
+      "b": "Gustavo + Waldemar",
+      "value": 0.6152461069294686
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Irving",
+      "b": "Tuto + Victor",
+      "value": 0.6273512449763525
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Irving",
+      "b": "Tuto + Waldemar",
+      "value": 0.5801984453034327
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Irving",
+      "b": "Victor + Waldemar",
+      "value": 0.5809431230997605
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Tuto",
+      "b": "Gustavo + Irving",
+      "value": 0.49153401191333534
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Tuto",
+      "b": "Gustavo + Victor",
+      "value": 0.5170668756458999
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Tuto",
+      "b": "Gustavo + Waldemar",
+      "value": 0.5088736149129098
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Tuto",
+      "b": "Irving + Victor",
+      "value": 0.42348162559973784
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Tuto",
+      "b": "Irving + Waldemar",
+      "value": 0.3849182788775056
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Tuto",
+      "b": "Victor + Waldemar",
+      "value": 0.4732071684063812
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Victor",
+      "b": "Gustavo + Irving",
+      "value": 0.5712398976043084
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Victor",
+      "b": "Gustavo + Tuto",
+      "value": 0.6359880601357704
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Victor",
+      "b": "Gustavo + Waldemar",
+      "value": 0.5881389205195183
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Victor",
+      "b": "Irving + Tuto",
+      "value": 0.55118773100812
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Victor",
+      "b": "Irving + Waldemar",
+      "value": 0.4630810140155666
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Victor",
+      "b": "Tuto + Waldemar",
+      "value": 0.5524183556624718
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Waldemar",
+      "b": "Gustavo + Irving",
+      "value": 0.5546733431954737
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Waldemar",
+      "b": "Gustavo + Tuto",
+      "value": 0.62026018460496
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Waldemar",
+      "b": "Gustavo + Victor",
+      "value": 0.579746422392186
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Waldemar",
+      "b": "Irving + Tuto",
+      "value": 0.5344777901031518
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Waldemar",
+      "b": "Irving + Victor",
+      "value": 0.48623882623779346
+    },
+    {
+      "mode": "pairs",
+      "a": "Georges + Waldemar",
+      "b": "Tuto + Victor",
+      "value": 0.5842848874030665
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Irving",
+      "b": "Georges + Tuto",
+      "value": 0.5084659880866645
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Irving",
+      "b": "Georges + Victor",
+      "value": 0.4287601023956916
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Irving",
+      "b": "Georges + Waldemar",
+      "value": 0.4453266568045264
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Irving",
+      "b": "Tuto + Victor",
+      "value": 0.5301676100771213
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Irving",
+      "b": "Tuto + Waldemar",
+      "value": 0.48089305546551137
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Irving",
+      "b": "Victor + Waldemar",
+      "value": 0.4816565132425715
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Tuto",
+      "b": "Georges + Irving",
+      "value": 0.3382428496304079
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Tuto",
+      "b": "Georges + Victor",
+      "value": 0.36401193986422964
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Tuto",
+      "b": "Georges + Waldemar",
+      "value": 0.37973981539504
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Tuto",
+      "b": "Irving + Victor",
+      "value": 0.36685998660743113
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Tuto",
+      "b": "Irving + Waldemar",
+      "value": 0.3304969422775294
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Tuto",
+      "b": "Victor + Waldemar",
+      "value": 0.41471962494543546
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Victor",
+      "b": "Georges + Irving",
+      "value": 0.37702043714789757
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Victor",
+      "b": "Georges + Tuto",
+      "value": 0.48293312435410013
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Victor",
+      "b": "Georges + Waldemar",
+      "value": 0.42025357760781396
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Victor",
+      "b": "Irving + Tuto",
+      "value": 0.4542279705169097
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Victor",
+      "b": "Irving + Waldemar",
+      "value": 0.3688815148533249
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Victor",
+      "b": "Tuto + Waldemar",
+      "value": 0.4554618025043313
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Waldemar",
+      "b": "Georges + Irving",
+      "value": 0.38475389307053137
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Waldemar",
+      "b": "Georges + Tuto",
+      "value": 0.4911263850870901
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Waldemar",
+      "b": "Georges + Victor",
+      "value": 0.4118610794804817
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Waldemar",
+      "b": "Irving + Tuto",
+      "value": 0.46236971458633724
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Waldemar",
+      "b": "Irving + Victor",
+      "value": 0.41483930529016577
+    },
+    {
+      "mode": "pairs",
+      "a": "Gustavo + Waldemar",
+      "b": "Tuto + Victor",
+      "value": 0.5128601161225748
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Tuto",
+      "b": "Georges + Gustavo",
+      "value": 0.5522431478644185
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Tuto",
+      "b": "Georges + Victor",
+      "value": 0.44881226899188
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Tuto",
+      "b": "Georges + Waldemar",
+      "value": 0.4655222098968483
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Tuto",
+      "b": "Gustavo + Victor",
+      "value": 0.5457720294830903
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Tuto",
+      "b": "Gustavo + Waldemar",
+      "value": 0.5376302854136626
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Tuto",
+      "b": "Victor + Waldemar",
+      "value": 0.5020084978527646
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Victor",
+      "b": "Georges + Gustavo",
+      "value": 0.5993907140145432
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Victor",
+      "b": "Georges + Tuto",
+      "value": 0.5765183744002622
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Victor",
+      "b": "Georges + Waldemar",
+      "value": 0.5137611737622064
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Victor",
+      "b": "Gustavo + Tuto",
+      "value": 0.6331400133925689
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Victor",
+      "b": "Gustavo + Waldemar",
+      "value": 0.5851606947098341
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Victor",
+      "b": "Tuto + Waldemar",
+      "value": 0.5493797340328085
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Waldemar",
+      "b": "Georges + Gustavo",
+      "value": 0.6371820152346523
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Waldemar",
+      "b": "Georges + Tuto",
+      "value": 0.6150817211224943
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Waldemar",
+      "b": "Georges + Victor",
+      "value": 0.5369189859844333
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Waldemar",
+      "b": "Gustavo + Tuto",
+      "value": 0.6695030577224707
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Waldemar",
+      "b": "Gustavo + Victor",
+      "value": 0.631118485146675
+    },
+    {
+      "mode": "pairs",
+      "a": "Irving + Waldemar",
+      "b": "Tuto + Victor",
+      "value": 0.6354510182694257
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Victor",
+      "b": "Georges + Gustavo",
+      "value": 0.5018699850527781
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Victor",
+      "b": "Georges + Irving",
+      "value": 0.37264875502364747
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Victor",
+      "b": "Georges + Waldemar",
+      "value": 0.41571511259693356
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Victor",
+      "b": "Gustavo + Irving",
+      "value": 0.4698323899228786
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Victor",
+      "b": "Gustavo + Waldemar",
+      "value": 0.48713988387742524
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Victor",
+      "b": "Irving + Waldemar",
+      "value": 0.36454898173057426
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Waldemar",
+      "b": "Georges + Gustavo",
+      "value": 0.5510124330138106
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Waldemar",
+      "b": "Georges + Irving",
+      "value": 0.4198015546965672
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Waldemar",
+      "b": "Georges + Victor",
+      "value": 0.44758164433752823
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Waldemar",
+      "b": "Gustavo + Irving",
+      "value": 0.5191069445344887
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Waldemar",
+      "b": "Gustavo + Victor",
+      "value": 0.5445381974956687
+    },
+    {
+      "mode": "pairs",
+      "a": "Tuto + Waldemar",
+      "b": "Irving + Victor",
+      "value": 0.4506202659671916
+    },
+    {
+      "mode": "pairs",
+      "a": "Victor + Waldemar",
+      "b": "Georges + Gustavo",
+      "value": 0.5502557434025925
+    },
+    {
+      "mode": "pairs",
+      "a": "Victor + Waldemar",
+      "b": "Georges + Irving",
+      "value": 0.41905687690023957
+    },
+    {
+      "mode": "pairs",
+      "a": "Victor + Waldemar",
+      "b": "Georges + Tuto",
+      "value": 0.5267928315936188
+    },
+    {
+      "mode": "pairs",
+      "a": "Victor + Waldemar",
+      "b": "Gustavo + Irving",
+      "value": 0.5183434867574285
+    },
+    {
+      "mode": "pairs",
+      "a": "Victor + Waldemar",
+      "b": "Gustavo + Tuto",
+      "value": 0.5852803750545645
+    },
+    {
+      "mode": "pairs",
+      "a": "Victor + Waldemar",
+      "b": "Irving + Tuto",
+      "value": 0.4979915021472354
+    }
+  ]
+}

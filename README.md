@@ -6,7 +6,7 @@ A free, offline tournament desk for dominoes with rotating partners, individual 
 
 Open [Hawaiian domino](https://finol-digital.github.io/dominoes-tournament/) in your browser. For the display screen, use [TV view](https://finol-digital.github.io/dominoes-tournament/?tv=1).
 
-The hosted app saves registrations and results only in your browser. To move an existing local event online, export a backup from the local tracker and restore it on the hosted app. Use the same browser/profile on the same computer for the organizer and TV tabs; other devices do not share the event.
+The hosted app saves live registrations and results in your browser. Shared historical results load automatically from `dominos-tournament-data.json`. To move an existing local event online, export a backup from the local tracker and restore it on the hosted app. Use the same browser/profile on the same computer for the organizer and TV tabs; other devices do not share the live event.
 
 GitHub Pages publishes the root of the `main` branch. The `.nojekyll` file serves the app as static files, and `index.html` opens the standalone tracker while retaining the TV setting. Rebuild `Domino-Night.html` with `python build.py` after source changes, then commit and push to publish updates.
 
@@ -17,6 +17,14 @@ Download or clone this repository. Open **Domino-Night.html** in Chrome or Edge.
 On Windows, you can also double-click **Open Tracker.cmd**. If Python is available, the launcher serves the app at <http://127.0.0.1:8765/Domino-Night.html>. Otherwise it opens the standalone HTML file. If Windows blocks the launcher, open the HTML file directly or run `python serve.py`.
 
 Use the same browser and opening method throughout an event. A directly opened file and the localhost address use separate browser storage; use **Export backup** and **Restore backup** to move an event between them.
+
+## Statistics, H2H, and win probability
+
+Open **Statistics & history** in the app or [the statistics page](statistics.html). The initial shared history contains **27 players, 16 events, and 124 completed games** from the Wednesday Group workbook and October 3 tournament backup. One unplayed game is retained without contributing statistics.
+
+Ratings reproduce the workbook's custom **ELO Score** formula. Game probabilities use partnership ratings and remain unavailable until both partnerships have recorded games together. Use the page's group/event filters, individual and partnership tables, H2H comparisons, matchup calculator, and game history.
+
+After each event, choose **Export history → Review & save to history → Export history JSON**. Replace the root `dominos-tournament-data.json` in a GitHub pull request. Once merged, the hosted app loads the new file automatically; no paid database or server is needed. Keep **Export backup** for restoring the live tournament. See [the history guide](docs/history.md) for imports, corrections, aliases, offline copies, and the rating formula.
 
 ## Register players
 
@@ -50,6 +58,8 @@ Older events remain loadable. Select **Rebalance remaining matches** to replace 
 
 ## Scores, TV display, and backups
 
+To give a player a bye, open the desired **Qualifying round → Switch bye**. Choose the player under **Give bye to**, then choose someone already resting under **Bring into match**. Review and apply the switch. The app downloads a backup, preserves saved results and the other matches in that round, and adjusts later assignments to keep exactly four games each with no repeated teammates. This can require extra rounds; the review shows the new round count before applying. Reprint any changed rounds. A switch is blocked if the selected match or a later round has saved results, the replacement has already reached four games, or the switch would repeat a teammate.
+
 Enter confirmed scores under **Qualifying rounds**. Finish all tables and waves in a round before starting the next round. After qualifying, review **Standings**, publicly click **Draw ties & create playoffs**, then enter scores under **Playoffs**.
 
 Click **Open TV display**, move that window to an extended display or cast it to your TV, and use **Full screen**. The display automatically cycles through standings pages and updates as scores are saved.
@@ -58,7 +68,7 @@ Click **Open TV display**, move that window to an extended display or cast it to
 
 Progress is stored in the browser. Keep only one organizer tab open and export a JSON backup after every round. Restore that backup when changing computers, browsers, or opening methods. Avoid private browsing for an event. CSV exports are for reading standings, not restoring an event.
 
-The repository contains only the app, generic placeholders, and documentation. It does not contain live player registrations or results.
+The repository includes the shared historical player names and results supplied for this project. Live organizer edits remain in browser storage until you export and submit an updated history file.
 
 ## Printable rules
 
@@ -83,13 +93,15 @@ After editing the sources, rebuild and run the checks:
 ```sh
 python build.py
 node checks.cjs
+node history-checks.cjs
+node history-ui-checks.cjs
 ```
 
 Use a current Node.js version with the global Web Crypto API (Node 22 or newer). Python 3 is required for the builder and optional server. For UI changes, inspect the organizer and TV views; keep live event data intact during testing.
 
 The PDF can be rebuilt with `python tools/create_rules_pdf.py` after installing `reportlab` and `pypdf`. The PDF builder does not affect browser event data.
 
-Keep generated `Domino-Night.html` committed so anyone can use the app without build tools. Do not commit real event backups or standings exports.
+Keep generated `Domino-Night.html` and `statistics.html` committed so anyone can use the app without build tools. Data-only updates to `dominos-tournament-data.json` are fetched by hosted pages immediately; rebuild before distributing updated offline HTML copies. Keep raw event backups and standings exports outside the repository; publish shared history through the dedicated JSON file.
 
 ## License
 

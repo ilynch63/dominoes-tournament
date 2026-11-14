@@ -72,6 +72,41 @@ function rebalance(state){
  const kept=state.rounds.map(r=>{const matches=r.matches.filter(m=>m.score),active=new Set(matches.flatMap(m=>m.teams.flat()));return {matches,byes:Array.from({length:n},(_,i)=>i).filter(i=>!active.has(i))};}).filter(r=>r.matches.length);
  return schedule(n,state.tables,kept);
 }
+// Exchange a seat and a bye without changing any recorded match.
+function switchBye(state,roundIndex,restingPlayer,replacement){
+ validate(state);
+ if(state.playoffs||needsExtension(state))throw Error('Finish updating qualifying before switching a bye.');
+ const round=state.rounds[roundIndex];
+ if(!Number.isInteger(roundIndex)||!round||!round.byes.includes(replacement))throw Error('Choose a player who has a bye in this round.');
+ const match=round.matches.find(m=>m.teams.flat().includes(restingPlayer));
+ if(!match||match.score)throw Error('Choose a player in a match with no saved result.');
+ if(state.rounds.slice(roundIndex+1).some(r=>r.matches.some(m=>m.score)))throw Error('Later rounds already have saved results. Their schedule cannot be changed.');
+ const rounds=JSON.parse(JSON.stringify(state.rounds));
+ const exchange=(r,out,incoming)=>{
+   r.byes=r.byes.map(id=>id===incoming?out:id);
+   r.matches.forEach(m=>m.teams=m.teams.map(t=>t.map(id=>id===out?incoming:id)));
+ };
+ exchange(rounds[roundIndex],restingPlayer,replacement);
+ const kept=rounds.slice(0,roundIndex+1),pairs=new Set();
+ for(const r of kept)for(const m of r.matches)for(const t of m.teams){
+   const pair=key(...t);
+   if(pairs.has(pair))throw Error('This switch would repeat a teammate. Choose a different player with a bye.');
+   pairs.add(pair);
+ }
+ const counts=scheduledCounts({...state,rounds:kept});
+ if(counts.some(c=>c>MIN_MATCHES))throw Error('That player already has four games. Choose a different player with a bye.');
+ // Prefer a reciprocal switch later so the rest of the schedule stays intact.
+ for(let i=roundIndex+1;i<rounds.length;i++){
+   if(!rounds[i].byes.includes(restingPlayer)||rounds[i].byes.includes(replacement))continue;
+   const candidate=JSON.parse(JSON.stringify(rounds));
+   exchange(candidate[i],replacement,restingPlayer);
+   try{validate({...state,version:3,rounds:candidate});return candidate;}catch{}
+ }
+ // Rebuild only later rounds if a reciprocal switch would repeat a teammate.
+ const rebuilt=schedule(state.players.length,state.tables,kept);
+ validate({...state,version:3,rounds:rebuilt});
+ return rebuilt;
+}
 function validScore(a,b,target=100){return Number.isSafeInteger(a)&&Number.isSafeInteger(b)&&a>=0&&b>=0&&Math.max(a,b)>=target&&Math.min(a,b)<target&&Math.max(a,b)<=1000000;}
 function compare(a,b){return b.wins*a.played-a.wins*b.played || b.points*a.played-a.points*b.played;}
 function standings(state){
@@ -144,6 +179,6 @@ function validate(s){
  }
  return s;
 }
-const api={MIN_MATCHES,requiredRounds,scheduledCounts,needsExtension,shuffle,schedule,rebalance,validScore,compare,standings,complete,createPlayoffs,playoffBracket,syncQuarter,syncFinal,finalTarget,validate};
+const api={MIN_MATCHES,requiredRounds,scheduledCounts,needsExtension,shuffle,schedule,rebalance,switchBye,validScore,compare,standings,complete,createPlayoffs,playoffBracket,syncQuarter,syncFinal,finalTarget,validate};
 if(typeof module!=='undefined')module.exports=api;else root.Domino=api;
 })(typeof window!=='undefined'?window:globalThis);

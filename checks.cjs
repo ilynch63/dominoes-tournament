@@ -81,4 +81,42 @@ const savedOrder=JSON.stringify(previous.playoffs.seeds),savedDraw=JSON.stringif
 Object.assign(previous.playoffs,D.playoffBracket(previous.playoffs.seeds));D.validate(previous);
 assert.equal(previous.playoffs.pairing,'adjacent');assert.equal(JSON.stringify(previous.playoffs.seeds),savedOrder);assert.equal(JSON.stringify(previous.playoffs.draws),savedDraw);assert.deepEqual(previous.playoffs.semis,[null,null]);assert.equal(previous.playoffs.final,null);
 const badFormat=JSON.parse(JSON.stringify(previous));badFormat.playoffs.pairing='unknown';assert.throws(()=>D.validate(badFormat));
-console.log(`PASS: ${schedules} attendance counts (8–48), exactly four games, reduced final rounds, unique teammates, legacy/partial-result migration, preserved results, playoff eligibility, scoring, ranking, and backups.`);
+const byeFixture={version:3,title:'Bye switch checks',players:Array.from({length:9},(_,i)=>`P${i}`),tables:2,playoffs:null,
+ rounds:[
+  {byes:[0],teams:[[[5,2],[8,6]],[[4,3],[1,7]]]},
+  {byes:[6],teams:[[[1,3],[5,0]],[[2,7],[4,8]]]},
+  {byes:[8],teams:[[[4,1],[0,2]],[[3,6],[7,5]]]},
+  {byes:[7],teams:[[[3,2],[6,1]],[[8,0],[4,5]]]},
+  {byes:[5,3,2,4,1],teams:[[[6,0],[8,7]]]}
+ ].map(r=>({byes:r.byes,matches:r.teams.map((teams,i)=>({teams,score:null,table:i+1,wave:1}))}))};
+D.validate(byeFixture);
+let byeSuccesses=0,byeRejections=0;
+for(let ri=0;ri<byeFixture.rounds.length;ri++)for(const incoming of byeFixture.rounds[ri].byes)for(const out of byeFixture.rounds[ri].matches.flatMap(m=>m.teams.flat())){
+ const event=JSON.parse(JSON.stringify(byeFixture));
+ event.rounds.slice(0,ri).forEach(r=>r.matches.forEach(m=>m.score=[108,70]));
+ const untouched=event.rounds[ri].matches.find(m=>!m.teams.flat().includes(out));
+ if(untouched)untouched.score=[100,65];
+ const before=JSON.stringify(event);let rounds;
+ try{rounds=D.switchBye(event,ri,out,incoming);}catch(e){
+   assert.match(e.message,/repeat a teammate|already has four|cannot be completed|Could not find a rotation/);byeRejections++;
+ }
+ assert.equal(JSON.stringify(event),before,'Bye review must never mutate the saved event');
+ if(!rounds)continue;
+ const updated={...event,rounds};D.validate(JSON.parse(JSON.stringify(updated)));
+ assert(D.scheduledCounts(updated).every(n=>n===4));
+ assert.deepEqual(rounds.slice(0,ri),event.rounds.slice(0,ri),'Earlier rounds stay unchanged');
+ assert(rounds[ri].byes.includes(out));assert(!rounds[ri].byes.includes(incoming));
+ event.rounds[ri].matches.forEach((m,j)=>assert.deepEqual(rounds[ri].matches[j],{...m,teams:m.teams.map(t=>t.map(id=>id===out?incoming:id))}));
+ assert.deepEqual(rounds.flatMap(r=>r.matches).filter(m=>m.score),event.rounds.flatMap(r=>r.matches).filter(m=>m.score),'All saved results keep their original players');
+ byeSuccesses++;
+}
+assert(byeSuccesses>0);assert(byeRejections>0);
+assert.throws(()=>D.switchBye(byeFixture,1,4,6),/repeat a teammate/);
+assert.throws(()=>D.switchBye(byeFixture,0,5,1),/has a bye/);
+assert.throws(()=>D.switchBye(byeFixture,0,0,0),/no saved result/);
+assert.throws(()=>D.switchBye(byeFixture,-1,5,0),/has a bye/);
+const lockedBye=JSON.parse(JSON.stringify(byeFixture));lockedBye.rounds[0].matches[0].score=[100,0];
+assert.throws(()=>D.switchBye(lockedBye,0,5,0),/no saved result/);
+lockedBye.rounds[0].matches[0].score=null;lockedBye.rounds[2].matches[0].score=[100,0];
+assert.throws(()=>D.switchBye(lockedBye,0,5,0),/Later rounds/);
+console.log(`PASS: ${schedules} attendance counts (8–48), exactly four games, reduced final rounds, unique teammates, legacy/partial-result migration, preserved results, playoff eligibility, scoring, ranking, backups, and bye switches (${byeSuccesses} valid, ${byeRejections} safely rejected).`);
