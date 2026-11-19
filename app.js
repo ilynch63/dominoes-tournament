@@ -1,10 +1,10 @@
 'use strict';
 const D=Domino,KEY='domino-tournament-v1',isTV=new URLSearchParams(location.search).has('tv');
-let state={version:3,title:'Hawaiian domino',players:(historyData.defaultPlayers??[]).map(id=>historyData.players.find(p=>p.id===id).name),tables:6,rounds:[],playoffs:null,updated:null},view='registration',roundIndex=0,tvPage=0,tvMode='auto',saveOK=true,loadError=false;
+let state={version:3,title:'Endless Bonchones -- Domino',players:(historyData.defaultPlayers??[]).map(id=>historyData.players.find(p=>p.id===id).name),tables:6,rounds:[],playoffs:null,updated:null},view='registration',roundIndex=0,tvPage=0,tvMode='auto',saveOK=true,loadError=false;
 if(state.players.length<16)state.players=Array.from({length:24},(_,i)=>`Player ${i+1}`);
 const tvPageSize=()=>window.innerHeight<850?8:12;
 const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-try{const saved=localStorage.getItem(KEY);if(saved){state=D.validate(JSON.parse(saved));view=state.rounds.length?'rounds':'registration';}}catch(e){saveOK=false;loadError=true;}
+try{const saved=localStorage.getItem(KEY);if(saved){state=D.validate(JSON.parse(saved));if(state.title==='Hawaiian domino')state.title='Endless Bonchones -- Domino';view=state.rounds.length?'rounds':'registration';}}catch(e){saveOK=false;loadError=true;}
 if(location.pathname.endsWith('/statistics.html'))view='history';
 let channel;try{channel=new BroadcastChannel(KEY);}catch{}
 function tell(t){$('toast').textContent=t;clearTimeout(tell.timer);tell.timer=setTimeout(()=>$('toast').textContent='',6500);}

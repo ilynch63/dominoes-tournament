@@ -4,7 +4,7 @@ A free, offline tournament desk for dominoes with rotating partners, individual 
 
 ## Use the hosted app
 
-Open [Hawaiian domino](https://finol-digital.github.io/dominoes-tournament/) in your browser. For the display screen, use [TV view](https://finol-digital.github.io/dominoes-tournament/?tv=1).
+Open [Endless Bonchones -- Domino](https://finol-digital.github.io/dominoes-tournament/) in your browser. For the display screen, use [TV view](https://finol-digital.github.io/dominoes-tournament/?tv=1).
 
 The hosted app saves live registrations and results in your browser. Shared historical results load automatically from `dominos-tournament-data.json`. To move an existing local event online, export a backup from the local tracker and restore it on the hosted app. Use the same browser/profile on the same computer for the organizer and TV tabs; other devices do not share the live event.
 
