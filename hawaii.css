@@ -62,3 +62,21 @@ body.tv{height:100vh;overflow:hidden}
 .bye-controls .fieldrow{flex-wrap:wrap}
 .bye-controls .fieldrow>label{min-width:200px}
 .bye-controls select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* Default dark theme for the organizer and statistics views. */
+:root{color-scheme:dark;--bg:#101b1b;--ink:#e5eee8;--muted:#a8bcb5;--line:#354b47;--card:#1a2928;--green:#53b8ad;--gold:#f4c879;--red:#ff8e80}
+body{background-color:var(--bg);background-image:radial-gradient(ellipse at 2% 55%,#18776f28,transparent 45%),radial-gradient(ellipse at 98% 96%,#bd725328,transparent 40%)}
+header{background:linear-gradient(112deg,#102a30 0%,#12454a 58%,#176b68 100%);border-bottom-color:#c89254}
+.tile{color:#56c4b7;background:#213332;border-color:#d2ad70;box-shadow:5px 5px 0 #8e5b49,0 6px 18px #0005}
+nav{border-color:var(--line)}nav button{color:#b8d4ce}nav button:hover{background:#24423e;color:#f0f5e9}
+button:hover{background:#29423d;border-color:#59b8aa}button.primary{background:#a84532;border-color:#c96a50}button.primary:hover{background:#c25b43}
+.panel,.match,.table-wrap{background:#1a2928;border-color:#354b47;box-shadow:0 5px 22px #0003}.panel h2,.sectionbar h2,.panel h3{color:#d6ebe0}
+.stat{background:#1a2928;box-shadow:0 4px 16px #0003}.stat b{color:#e2eee5}.stat span{color:#a8bcb5}
+input,textarea,select{color:#e5eee8;background:#142120;border-color:#49635d}input:disabled{background:#253330}.team-row input{color:#b8ece1;background:#142120}
+.notice{background:#3b3425;color:#f0dfbb}.notice button{background:#2b3027}
+.layout aside .panel:first-child{background:linear-gradient(145deg,#203a31 0%,#29392f 70%);border-color:#49644f}
+th{background:#243a35;color:#b9d2ca}td{border-color:#354b47}tbody tr:nth-child(even){background:#1e302e}tr.top .rank{background:#285248;color:#a8e2d2}.pill{background:#29463a;color:#c9e8bd}
+.versus{color:#c4ab87}.champion{background:linear-gradient(120deg,#164b52,#145b59);border-color:#c99a5a}.champion h2{color:#fff0d2}
+dialog{background:#1a2928;color:#e5eee8;box-shadow:0 15px 70px #0009}#toast{background:#16454a;border-color:#58a69b}.empty{background:#1c302d;border-color:#52766d}
+.history-tabs button.active{background:#284b46}.prediction-result{background:#223531}nav a:hover{background:#24423e}
+@media print{:root{color-scheme:light}body{background:white!important;background-image:none!important}input,textarea,select{color:black;background:white}}
