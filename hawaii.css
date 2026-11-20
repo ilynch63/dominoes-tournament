@@ -80,3 +80,8 @@ th{background:#243a35;color:#b9d2ca}td{border-color:#354b47}tbody tr:nth-child(e
 dialog{background:#1a2928;color:#e5eee8;box-shadow:0 15px 70px #0009}#toast{background:#16454a;border-color:#58a69b}.empty{background:#1c302d;border-color:#52766d}
 .history-tabs button.active{background:#284b46}.prediction-result{background:#223531}nav a:hover{background:#24423e}
 @media print{:root{color-scheme:light}body{background:white!important;background-image:none!important}input,textarea,select{color:black;background:white}}
+.module-nav{display:flex;gap:8px;margin:0 0 14px;padding:0;border:0;flex-wrap:wrap}
+.module-nav button{border:1px solid var(--line);border-radius:10px;padding:12px 20px;background:var(--card);color:var(--muted);font-size:15px;font-weight:700}
+.module-nav button:hover{background:#29423d;color:#f0f5e9;border-color:#59b8aa}
+.module-nav button.active{background:#28766e;color:#f4f7e9;border-color:#53b8ad;box-shadow:0 3px 0 #0002}
+.module-nav button.active:hover{background:#348b80}

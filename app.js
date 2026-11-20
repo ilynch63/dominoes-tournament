@@ -1,11 +1,13 @@
 'use strict';
-const D=Domino,KEY='domino-tournament-v1',isTV=new URLSearchParams(location.search).has('tv');
+const D=Domino,KEY='domino-tournament-v1',isTV=new URLSearchParams(location.search).has('tv'),moduleFromLocation=()=>{const selected=new URLSearchParams(location.search).get('module');return ['tournament','date','statistics'].includes(selected)?selected:location.pathname.endsWith('/statistics.html')?'statistics':'tournament';};
+let activeModule=isTV?'tournament':moduleFromLocation();
 let state={version:3,title:'Endless Bonchones -- Domino',players:(historyData.defaultPlayers??[]).map(id=>historyData.players.find(p=>p.id===id).name),tables:6,rounds:[],playoffs:null,updated:null},view='registration',roundIndex=0,tvPage=0,tvMode='auto',saveOK=true,loadError=false;
 if(state.players.length<16)state.players=Array.from({length:24},(_,i)=>`Player ${i+1}`);
 const tvPageSize=()=>window.innerHeight<850?8:12;
 const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 try{const saved=localStorage.getItem(KEY);if(saved){state=D.validate(JSON.parse(saved));if(state.title==='Hawaiian domino')state.title='Endless Bonchones -- Domino';view=state.rounds.length?'rounds':'registration';}}catch(e){saveOK=false;loadError=true;}
-if(location.pathname.endsWith('/statistics.html'))view='history';
+function navigateModule(next){if(!['tournament','date','statistics'].includes(next)||next===activeModule)return;activeModule=next;const url=new URL(location.href);url.pathname=url.pathname.replace(/(?:Domino-Night|statistics)\.html$/,'Domino-Night.html');if(next==='tournament')url.searchParams.delete('module');else url.searchParams.set('module',next);history.pushState({module:next},'',url.href);render();}
+window.addEventListener('popstate',()=>{if(!isTV){activeModule=moduleFromLocation();render();}});
 let channel;try{channel=new BroadcastChannel(KEY);}catch{}
 function tell(t){$('toast').textContent=t;clearTimeout(tell.timer);tell.timer=setTimeout(()=>$('toast').textContent='',6500);}
 function ask(title,message,label='Continue'){return new Promise(resolve=>{$('dialogTitle').textContent=title;$('dialogBody').textContent=message;$('dialogOK').textContent=label;$('confirmDialog').showModal();const finish=v=>{$('confirmDialog').close();resolve(v);};$('dialogOK').onclick=()=>finish(true);$('dialogCancel').onclick=()=>finish(false);$('confirmDialog').oncancel=e=>{e.preventDefault();finish(false);};});}
@@ -55,16 +57,18 @@ function render(){
  document.body.classList.toggle('tv',isTV);$('eventTitle').textContent=state.title;
  if(isTV&&!$('tvStage')){const stage=document.createElement('div');stage.id='tvStage';const header=document.querySelector('body>header'),shell=document.querySelector('body>.shell');document.body.insertBefore(stage,header);stage.append(header,shell);}
 
- $('headerActions').innerHTML=isTV?'<button id="fullscreen">Full screen</button><button id="tvToggle">Switch view</button>':'<button id="tvOpen">Open TV display ↗</button><button id="export">Export backup</button><button id="import">Restore backup</button><input id="file" type="file" accept=".json,application/json" hidden>';
- $('nav').innerHTML=isTV?'':[['registration','Players'],['rounds','Qualifying rounds'],['standings','Standings'],['playoffs','Playoffs'],['rules','Rules & help']].map(([id,name])=>`<button data-view="${id}" class="${view===id?'active':''}">${name}</button>`).join('')+`<span class="status">${saveOK?'Saved on this browser':'Storage needs attention'}${state.updated?' · '+new Date(state.updated).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}):''}</span>`;
- $('footer').textContent=isTV?'Live display · Updates from the organizer tab on this computer · '+(state.updated?'Last saved '+new Date(state.updated).toLocaleTimeString():'Waiting for registration'):'Works offline on this computer. Keep one organizer tab open. Export backups after each round. The TV view follows this browser; it is not a remote scoring link.';
+ $('headerActions').innerHTML=isTV?'<button id="fullscreen">Full screen</button><button id="tvToggle">Switch view</button>':activeModule==='date'?'':'<button id="tvOpen">Open TV display ↗</button><button id="export">Export backup</button><button id="import">Restore backup</button><input id="file" type="file" accept=".json,application/json" hidden>';
+ $('moduleNav').innerHTML=isTV?'':[['tournament','Tournament'],['date','Dominoes Date'],['statistics','Statistics']].map(([id,name])=>`<button type="button" data-module="${id}" class="${activeModule===id?'active':''}" aria-pressed="${activeModule===id}">${name}</button>`).join('');
+ document.querySelectorAll('[data-module]').forEach(b=>b.onclick=()=>navigateModule(b.dataset.module));
+ $('nav').innerHTML=isTV||activeModule!=='tournament'?'':[['registration','Players'],['rounds','Qualifying rounds'],['standings','Standings'],['playoffs','Playoffs'],['rules','Rules & help']].map(([id,name])=>`<button data-view="${id}" class="${view===id?'active':''}">${name}</button>`).join('')+`<span class="status">${saveOK?'Saved on this browser':'Storage needs attention'}${state.updated?' · '+new Date(state.updated).toLocaleTimeString([], {hour:'2-digit',minute':'2-digit'}):''}</span>`;
+ $('footer').textContent=activeModule==='date'?'':isTV?'Live display · Updates from the organizer tab on this computer · '+(state.updated?'Last saved '+new Date(state.updated).toLocaleTimeString():'Waiting for registration'):'Works offline on this computer. Keep one organizer tab open. Export backups after each round. The TV view follows this browser; it is not a remote scoring link.';
  if(isTV){renderTV();$('fullscreen').onclick=toggleFullscreen;$('tvToggle').onclick=()=>{tvMode=tvMode==='auto'?'standings':'auto';renderTV();};return;}
- $('main').innerHTML=view==='history'?historyView():loadError?'<div class="notice"><b>The saved event could not be loaded.</b> Your stored data has not been overwritten. Restore a backup, or start a new event below.</div><button id="recoverNew" class="danger">Start a new event</button>':stats()+extensionNotice()+({registration:registration,rounds:roundsView,standings:standingsView,playoffs:playoffsView,rules:rulesView}[view]());
- const historyLink=document.createElement('a');historyLink.href=view==='history'?'Domino-Night.html':'statistics.html';historyLink.textContent=view==='history'?'Tournament desk ↗':'Statistics & history ↗';$('nav').prepend(historyLink);
- const historyExportButton=document.createElement('button');historyExportButton.textContent='Export history';historyExportButton.onclick=()=>{view='history';historyTab='manage';render();};$('headerActions').append(historyExportButton);
+ if(activeModule==='date'){$('main').innerHTML='';return;}
+ $('main').innerHTML=activeModule==='statistics'?historyView():loadError?'<div class="notice"><b>The saved event could not be loaded.</b> Your stored data has not been overwritten. Restore a backup, or start a new event below.</div><button id="recoverNew" class="danger">Start a new event</button>':stats()+extensionNotice()+({registration:registration,rounds:roundsView,standings:standingsView,playoffs:playoffsView,rules:rulesView}[view]());
+ const historyExportButton=document.createElement('button');historyExportButton.textContent='Export history';historyExportButton.onclick=()=>{historyTab='manage';if(activeModule==='statistics')render();else navigateModule('statistics');};$('headerActions').append(historyExportButton);
  document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;render();});
  $('tvOpen').onclick=()=>{const url=new URL(location.href);url.searchParams.set('tv','1');const popup=window.open(url.href,'domino-tv');if(!popup)tell('Allow this browser’s popup to open the TV display, or open this address in a new tab with ?tv=1 added.');};$('export').onclick=backup;$('import').onclick=()=>$('file').click();$('file').onchange=restore;
- if(view==='history'){bindHistory();return;}
+ if(activeModule==='statistics'){bindHistory();return;}
  if(loadError){$('recoverNew').onclick=async()=>{if(await ask('Start a new event?','The unreadable saved event will be replaced. Restore a backup instead if you need those results.','Replace saved event')){loadError=false;save();render();}};return;}
  bind();
 }
@@ -162,4 +166,4 @@ async function saveScore(id){const target=id==='f'?120:100;const aText=$(id+'-0'
 async function restore(e){const file=e.target.files[0];if(!file)return;try{if(file.size>1000000)throw Error('Backup file is too large.');const parsed=D.validate(JSON.parse(await file.text()));if(await ask('Restore this event?',`Load “${parsed.title}” with ${parsed.players.length} players? This replaces the event in this browser. Export the current event first if needed.`,'Restore event')){if(!loadError)backup();state=parsed;loadError=false;save();view=state.rounds.length?'rounds':'registration';roundIndex=0;render();tell('Backup restored.');}}catch(err){tell('Could not restore: '+err.message);}}
 if(isTV){setInterval(()=>{if(tvMode==='standings'||!state.rounds.length)return;tvPage=(tvPage+1)%Math.ceil(state.players.length/tvPageSize());renderTV();},12000);window.addEventListener('resize',()=>renderTV());document.addEventListener('fullscreenchange',()=>renderTV());document.fonts?.ready.then(fitTV);}
 render();
-refreshHistory().then(()=>{if(view==='history')render();});
+refreshHistory().then(()=>{if(activeModule==='statistics')render();});
