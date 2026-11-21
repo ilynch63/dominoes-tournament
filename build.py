@@ -9,6 +9,8 @@ template=template.replace('/* CORE_SCRIPT */',(p/'core.js').read_text(encoding='
 template=template.replace('/* HISTORY_CORE */',(p/'history-core.js').read_text(encoding='utf-8'))
 template=template.replace('/* HISTORY_UI */',(p/'history-ui.js').read_text(encoding='utf-8'))
 directory=json.loads((p/'player-directory.json').read_text(encoding='utf-8'))
+for person in directory:
+    person['showInStatistics']=person.get('showInStatistics') is not False
 data=json.loads((p/'dominos-tournament-data.json').read_text(encoding='utf-8'))
 date_data=json.loads((p/'domino-date-data.json').read_text(encoding='utf-8'))
 data['players']=[{'id':str(person['id']),'name':person['firstName'],'aliases':[]} for person in directory]

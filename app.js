@@ -1,4 +1,5 @@
 'use strict';
+window.playerDirectory=(window.playerDirectory??[]).map(person=>({...person,showInStatistics:person.showInStatistics!==false}));
 const D=Domino,KEY='domino-tournament-v2',isTV=new URLSearchParams(location.search).has('tv'),moduleFromLocation=()=>{const selected=new URLSearchParams(location.search).get('module');return ['tournament','date','statistics','players'].includes(selected)?selected:'statistics';};
 let activeModule=isTV?'tournament':moduleFromLocation();
 let dateStore=DominoDates.load(),openDateIds=new Set();
@@ -20,7 +21,7 @@ function save(){if(loadError){tell('Restore a valid backup or explicitly start a
 function receive(s){if(!isTV)return;try{state=D.validate(s);render();}catch{}}
 if(channel)channel.onmessage=e=>receive(e.data);
 window.addEventListener('storage',e=>{if(e.key===KEY&&e.newValue)try{receive(JSON.parse(e.newValue));}catch{}});
-window.addEventListener('storage',e=>{if(e.key==='domino-player-directory-v1'&&e.newValue)try{window.playerDirectory=JSON.parse(e.newValue);syncHistoryDirectory();render();}catch{}});
+window.addEventListener('storage',e=>{if(e.key==='domino-player-directory-v1'&&e.newValue)try{window.playerDirectory=JSON.parse(e.newValue).map(person=>({...person,showInStatistics:person.showInStatistics!==false}));syncHistoryDirectory();render();}catch{}});
 window.addEventListener('storage',e=>{if(e.key===DominoDates.KEY&&e.newValue)try{dateStore=DominoDates.validate(JSON.parse(e.newValue));syncHistoryDirectory();render();}catch{}});
 function download(name,data,type){const url=URL.createObjectURL(new Blob([data],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);}
 function backup(){download('domino-night-backup-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json',JSON.stringify(state,null,2),'application/json');tell('Backup downloaded. Keep it with your event files.');}
@@ -69,24 +70,24 @@ function playerHasRecordedGames(person){
  return matches.some(match=>match?.teams?.some(team=>team.some(index=>indices.includes(index))));
 }
 function playersView(){
- const rows=window.playerDirectory.map(person=>{const locked=playerHasRecordedGames(person);return `<tr><td><input value="${person.id}" aria-label="Player ID ${person.id}" readonly></td><td><input data-player-id="${person.id}" data-player-field="firstName" aria-label="First name for player ${person.id}" value="${esc(person.firstName)}"></td><td><select data-player-id="${person.id}" data-player-field="gender" aria-label="Gender for player ${person.id}"><option value="" ${person.gender?'':'selected'}></option><option value="F" ${person.gender==='F'?'selected':''}>F</option><option value="M" ${person.gender==='M'?'selected':''}>M</option></select></td><td><input data-player-id="${person.id}" data-player-field="fullName" aria-label="Full name for player ${person.id}" value="${esc(person.fullName??'')}"></td><td><input data-player-id="${person.id}" data-player-field="description" aria-label="Description for player ${person.id}" value="${esc(person.description??'')}"></td><td><input data-player-id="${person.id}" data-player-field="image" aria-label="Image for player ${person.id}" value="${esc(person.image??'')}"></td><td><button type="button" class="danger player-delete" data-delete-player="${person.id}" ${locked?'disabled title="This player appears in a recorded game."':''}>Delete</button>${locked?'<span class="small muted">In a game</span>':''}</td></tr>`;}).join('');
- return `<section class="panel"><div class="sectionbar"><div><h2>Players</h2><p class="small muted">Changes save automatically in this browser and are shared by the application modules.</p></div><button type="button" id="addPlayer" class="primary">Add player</button></div><div class="table-wrap player-directory-wrap"><table class="player-directory-table"><thead><tr><th>ID</th><th>First Name</th><th>Gender</th><th>Full Name</th><th>Description</th><th>Image</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
+ const rows=window.playerDirectory.map(person=>{const locked=playerHasRecordedGames(person);return `<tr><td><input value="${person.id}" aria-label="Player ID ${person.id}" readonly></td><td><input data-player-id="${person.id}" data-player-field="firstName" aria-label="First name for player ${person.id}" value="${esc(person.firstName)}"></td><td><select data-player-id="${person.id}" data-player-field="gender" aria-label="Gender for player ${person.id}"><option value="" ${person.gender?'':'selected'}></option><option value="F" ${person.gender==='F'?'selected':''}>F</option><option value="M" ${person.gender==='M'?'selected':''}>M</option></select></td><td><input type="checkbox" data-player-id="${person.id}" data-player-field="showInStatistics" aria-label="Show ${esc(person.firstName)} in Statistics" ${person.showInStatistics===false?'':'checked'}></td><td><input data-player-id="${person.id}" data-player-field="fullName" aria-label="Full name for player ${person.id}" value="${esc(person.fullName??'')}"></td><td><input data-player-id="${person.id}" data-player-field="description" aria-label="Description for player ${person.id}" value="${esc(person.description??'')}"></td><td><input data-player-id="${person.id}" data-player-field="image" aria-label="Image for player ${person.id}" value="${esc(person.image??'')}"></td><td><button type="button" class="danger player-delete" data-delete-player="${person.id}" ${locked?'disabled title="This player appears in a recorded game."':''}>Delete</button>${locked?'<span class="small muted">In a game</span>':''}</td></tr>`;}).join('');
+ return `<section class="panel"><div class="sectionbar"><div><h2>Players</h2><p class="small muted">Changes save automatically in this browser and are shared by the application modules.</p></div><button type="button" id="addPlayer" class="primary">Add player</button></div><div class="table-wrap player-directory-wrap"><table class="player-directory-table"><thead><tr><th>ID</th><th>First Name</th><th>Gender</th><th>Show in Statistics</th><th>Full Name</th><th>Description</th><th>Image</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
 }
-function persistPlayerDirectory(){
- try{localStorage.setItem('domino-player-directory-v1',JSON.stringify(window.playerDirectory));syncHistoryDirectory();return true;}
+function persistPlayerDirectory(refreshStatistics=false){
+ try{localStorage.setItem('domino-player-directory-v1',JSON.stringify(window.playerDirectory));syncHistoryDirectory(refreshStatistics);return true;}
  catch{tell('Could not save the shared player list in this browser.');return false;}
 }
 function bindPlayerDirectory(){
- document.querySelectorAll('[data-player-field]').forEach(input=>input.addEventListener(input.tagName==='SELECT'?'change':'input',()=>{
+ document.querySelectorAll('[data-player-field]').forEach(input=>input.addEventListener(input.tagName==='SELECT'||input.type==='checkbox'?'change':'input',()=>{
   const person=window.playerDirectory.find(p=>String(p.id)===input.dataset.playerId);if(!person)return;
-  const field=input.dataset.playerField,old=person[field]??'',value=input.value;person[field]=value;
+  const field=input.dataset.playerField,old=person[field]??'',value=input.type==='checkbox'?input.checked:input.value;person[field]=value;
   const oldNames=state.players.slice();
   if(field==='firstName')state.players=state.players.map((name,index)=>String(state.playerIds?.[index])===String(person.id)?value:name);
-  if(!persistPlayerDirectory()){person[field]=old;state.players=oldNames;input.value=old;return;}
+  if(!persistPlayerDirectory(field==='showInStatistics')){person[field]=old;state.players=oldNames;if(input.type==='checkbox')input.checked=Boolean(old);else input.value=old;return;}
   if(field==='firstName'&&state.players.some((name,index)=>name!==oldNames[index]))save();
  }));
  $('addPlayer').onclick=()=>{
-  const id=Math.max(0,...window.playerDirectory.map(p=>Number(p.id)||0))+1,person={id,firstName:`Player ${id}`,gender:'',fullName:'',description:'',image:''};
+  const id=Math.max(0,...window.playerDirectory.map(p=>Number(p.id)||0))+1,person={id,firstName:`Player ${id}`,gender:'',showInStatistics:true,fullName:'',description:'',image:''};
   window.playerDirectory.push(person);const addToEvent=!state.rounds.length;if(addToEvent){state.players.push(person.firstName);state.playerIds.push(String(id));}
   if(!persistPlayerDirectory()){window.playerDirectory.pop();if(addToEvent){state.players.pop();state.playerIds.pop();}return;}
   if(addToEvent)save();render();document.querySelector(`[data-player-id="${id}"][data-player-field="firstName"]`)?.focus();

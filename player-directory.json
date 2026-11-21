@@ -5,7 +5,8 @@
     "gender": "M",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 2,
@@ -13,7 +14,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 3,
@@ -21,7 +23,8 @@
     "gender": "M",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 4,
@@ -29,7 +32,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 5,
@@ -37,7 +41,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 6,
@@ -45,7 +50,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 7,
@@ -53,7 +59,8 @@
     "gender": "M",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 8,
@@ -61,7 +68,8 @@
     "gender": "M",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 9,
@@ -69,7 +77,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 10,
@@ -77,7 +86,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 11,
@@ -85,7 +95,8 @@
     "gender": "M",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 12,
@@ -93,7 +104,8 @@
     "gender": "M",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 13,
@@ -101,7 +113,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 14,
@@ -109,7 +122,8 @@
     "gender": "M",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 15,
@@ -117,7 +131,8 @@
     "gender": "M",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 16,
@@ -125,7 +140,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 17,
@@ -133,7 +149,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 18,
@@ -141,7 +158,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 19,
@@ -149,7 +167,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 20,
@@ -157,7 +176,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 21,
@@ -165,7 +185,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 22,
@@ -173,7 +194,8 @@
     "gender": "M",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 23,
@@ -181,7 +203,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 24,
@@ -189,7 +212,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 25,
@@ -197,7 +221,8 @@
     "gender": "M",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 26,
@@ -205,7 +230,8 @@
     "gender": "M",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 27,
@@ -213,7 +239,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 28,
@@ -221,7 +248,8 @@
     "gender": "M",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 29,
@@ -229,7 +257,8 @@
     "gender": "M",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 30,
@@ -237,7 +266,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 31,
@@ -245,7 +275,8 @@
     "gender": "F",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 32,
@@ -253,7 +284,8 @@
     "gender": "M",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   },
   {
     "id": 33,
@@ -261,6 +293,7 @@
     "gender": "M",
     "fullName": "",
     "description": "",
-    "image": ""
+    "image": "",
+    "showInStatistics": true
   }
 ]
