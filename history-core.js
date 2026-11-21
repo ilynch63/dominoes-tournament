@@ -31,26 +31,32 @@ function validate(data){
 }
 function blank(id,name,members){return {id,name,members,played:0,wins:0,losses:0,points:0,against:0,winPoints:0,lossPoints:0,events:new Set()};}
 function record(s,score,other,event){s.played++;s.points+=score;s.against+=other;s.events.add(event);if(score>other){s.wins++;s.winPoints+=score;}else{s.losses++;s.lossPoints+=score;}}
+const ELO_INITIAL=1500,ELO_K=32;
 function finish(s,pair=false){
  s.average=s.played?s.points/s.played:null;s.winRate=s.played?s.wins/s.played:null;s.winAverage=s.wins?s.winPoints/s.wins:null;s.lossAverage=s.losses?s.lossPoints/s.losses:null;
- // Exact weights from Estadisticas!M4:M9 and M14:M28. Individual missing-loss fallback is 1; pair fallback is 0.
- s.rating=s.played?0.5*s.average+0.25*s.winRate+0.05*s.points+0.1*(s.winAverage??0)+0.1*(s.lossAverage??(pair?0:1)):null;
+ // Retain the workbook composite as a descriptive score, without cumulative points.
+ s.weightedScore=s.played?0.5*s.average+0.3*s.winRate+0.1*(s.winAverage??0)+0.1*(s.lossAverage??(pair?0:1)):null;
  s.eventCount=s.events.size;delete s.events;return s;
 }
 const probability=(a,b)=>Number.isFinite(a)&&Number.isFinite(b)?1/(1+10**((b-a)/400)):null;
 function summarize(data,filter={}){
- const players=new Map(data.players.map(p=>[p.id,blank(p.id,p.name)])),pairs=new Map(),games=[];
+ const players=new Map(data.players.map(p=>[p.id,blank(p.id,p.name)])),pairs=new Map(),games=[],playerElo=new Map(data.players.map(p=>[p.id,ELO_INITIAL])),pairElo=new Map();
  for(const e of data.events.slice().sort((a,b)=>a.date.localeCompare(b.date)||a.id.localeCompare(b.id))){
   if(filter.eventId&&e.id!==filter.eventId||filter.source&&e.source?.kind!==filter.source||filter.before&&e.date>=filter.before)continue;
   for(const m of e.matches.slice().sort((a,b)=>a.order-b.order||a.id.localeCompare(b.id))){
    if(!m.score)continue;games.push({...m,eventId:e.id,eventTitle:e.title,date:e.date});
+   const keys=m.teams.map(pairKey),playerTeamRatings=m.teams.map(team=>team.reduce((sum,id)=>sum+(playerElo.get(id)??ELO_INITIAL),0)/2),expectedPlayer=probability(playerTeamRatings[0],playerTeamRatings[1]),actual=m.score[0]===m.score[1]?0.5:m.score[0]>m.score[1]?1:0,playerDelta=ELO_K*(actual-expectedPlayer);
+   for(const id of m.teams[0])playerElo.set(id,(playerElo.get(id)??ELO_INITIAL)+playerDelta);
+   for(const id of m.teams[1])playerElo.set(id,(playerElo.get(id)??ELO_INITIAL)-playerDelta);
+   const teamRatings=keys.map(key=>pairElo.get(key)??ELO_INITIAL),expectedTeam=probability(teamRatings[0],teamRatings[1]),teamDelta=ELO_K*(actual-expectedTeam);
+   pairElo.set(keys[0],teamRatings[0]+teamDelta);pairElo.set(keys[1],teamRatings[1]-teamDelta);
    m.teams.forEach((t,i)=>{const key=pairKey(t);if(!pairs.has(key))pairs.set(key,blank(key,t.map(id=>players.get(id).name).sort().join(' + '),t.slice().sort()));record(pairs.get(key),m.score[i],m.score[1-i],e.id);t.forEach(id=>record(players.get(id),m.score[i],m.score[1-i],e.id));});
   }
  }
- players.forEach(p=>finish(p));pairs.forEach(p=>finish(p,true));
+ players.forEach(p=>{finish(p);p.eloScore=p.played?playerElo.get(p.id):null;});pairs.forEach(p=>{finish(p,true);p.eloScore=pairElo.get(p.id)??null;});
  for(const collection of [players,pairs])for(const p of collection.values()){
   const opponents=[...collection.values()].filter(q=>q.played&&q.id!==p.id&&(!p.members||!p.members.some(id=>q.members.includes(id))));
-  p.expected=p.played&&opponents.length?opponents.reduce((sum,q)=>sum+probability(p.rating,q.rating),0)/opponents.length:null;
+  p.expected=p.played&&opponents.length?opponents.reduce((sum,q)=>sum+probability(p.eloScore,q.eloScore),0)/opponents.length:null;
   p.woe=p.expected===null?null:p.winRate-p.expected;
  }
  return {players,pairs,games};
@@ -64,7 +70,7 @@ function predict(summary,teams){
  if(!Array.isArray(teams)||teams.length!==2||teams.some(t=>t.length!==2)||new Set(teams.flat()).size!==4)return {probability:null,reason:'Choose four different players.'};
  const pairs=teams.map(t=>summary.pairs.get(pairKey(t)));
  if(pairs.some(p=>!p?.played))return {probability:null,reason:'Unavailable until both partnerships have recorded games together.',games:pairs.map(p=>p?.played??0)};
- return {probability:probability(pairs[0].rating,pairs[1].rating),games:pairs.map(p=>p.played),ratings:pairs.map(p=>p.rating)};
+ return {probability:probability(pairs[0].eloScore,pairs[1].eloScore),games:pairs.map(p=>p.played),ratings:pairs.map(p=>p.eloScore)};
 }
 function fingerprint(state){
  // Scores and playoff progress are deliberately excluded so corrections retain the same event identity.
