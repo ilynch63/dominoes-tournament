@@ -1,5 +1,5 @@
 'use strict';
-const H=DominoHistory,HISTORY_KEY='domino-history-drafts-v1';
+const H=DominoHistory,HISTORY_KEY='domino-history-drafts-v2';
 let historyBase=H.validate(JSON.parse(document.getElementById('historySeed').textContent));
 let historyDrafts={players:[],events:[]},historyData=historyBase,historyConflicts=[],historyError='',historyStatus='Bundled history',historyTab='players',historySource='',historyEvent='',historySearch='',historyMin=0,historySort='rating',historyMode='players',historyA='',historyB='',matchupIds=[],pendingHistoryState=null;
 let historySummary,historyLiveSummary,historyLoading=false,historyStorageError=false,historyStoredRaw=null;

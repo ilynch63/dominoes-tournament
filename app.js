@@ -1,7 +1,7 @@
 'use strict';
-const D=Domino,KEY='domino-tournament-v1',isTV=new URLSearchParams(location.search).has('tv'),moduleFromLocation=()=>{const selected=new URLSearchParams(location.search).get('module');return ['tournament','date','statistics'].includes(selected)?selected:location.pathname.endsWith('/statistics.html')?'statistics':'tournament';};
+const D=Domino,KEY='domino-tournament-v2',isTV=new URLSearchParams(location.search).has('tv'),moduleFromLocation=()=>{const selected=new URLSearchParams(location.search).get('module');return ['tournament','date','statistics'].includes(selected)?selected:location.pathname.endsWith('/statistics.html')?'statistics':'tournament';};
 let activeModule=isTV?'tournament':moduleFromLocation();
-let state={version:3,title:'Endless Bonchones -- Domino',players:(historyData.defaultPlayers??[]).map(id=>historyData.players.find(p=>p.id===id).name),tables:6,rounds:[],playoffs:null,updated:null},view='registration',roundIndex=0,tvPage=0,tvMode='auto',saveOK=true,loadError=false;
+let state={version:3,title:'Endless Bonchones -- Domino',players:window.playerDirectory.map(p=>p.firstName),tables:6,rounds:[],playoffs:null,updated:null},view='registration',roundIndex=0,tvPage=0,tvMode='auto',saveOK=true,loadError=false;
 if(state.players.length<16)state.players=Array.from({length:24},(_,i)=>`Player ${i+1}`);
 const tvPageSize=()=>window.innerHeight<850?8:12;
 const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

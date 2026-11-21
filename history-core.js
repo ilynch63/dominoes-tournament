@@ -2,7 +2,7 @@
 'use strict';
 const MODEL='wednesday-workbook-v1';
 const normalize=s=>s.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').trim().replace(/\s+/g,' ').toLowerCase();
-const playerId=name=>'player-'+normalize(name).replace(/[^a-z0-9]+/g,'-');
+const playerId=name=>{const match=(root.playerDirectory??[]).find(p=>normalize(p.firstName)===normalize(name)||(p.fullName&&normalize(p.fullName)===normalize(name)));return match?String(match.id):'player-'+normalize(name).replace(/[^a-z0-9]+/g,'-');};
 const pairKey=team=>team.slice().sort().join('|');
 const clone=x=>JSON.parse(JSON.stringify(x));
 const dateOK=s=>typeof s==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(s)&&Number.isFinite(Date.parse(s))&&new Date(s).toISOString().slice(0,10)===s;

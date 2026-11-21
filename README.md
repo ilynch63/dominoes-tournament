@@ -20,7 +20,7 @@ Use the same browser and opening method throughout an event. A directly opened f
 
 ## Statistics, H2H, and win probability
 
-Open **Statistics & history** in the app or [the statistics page](statistics.html). The initial shared history contains **27 players, 16 events, and 124 completed games** from the Wednesday Group workbook and October 3 tournament backup. One unplayed game is retained without contributing statistics.
+Open **Statistics & history** in the app or [the statistics page](statistics.html). The shared player directory contains 32 players and is the common roster source for all modules. Historical results will be loaded from the supplied workbook.
 
 Ratings reproduce the workbook's custom **ELO Score** formula. Game probabilities use partnership ratings and remain unavailable until both partnerships have recorded games together. Use the page's group/event filters, individual and partnership tables, H2H comparisons, matchup calculator, and game history.
 
