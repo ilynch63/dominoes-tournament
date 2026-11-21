@@ -85,3 +85,5 @@ dialog{background:#1a2928;color:#e5eee8;box-shadow:0 15px 70px #0009}#toast{back
 .module-nav button:hover{background:#29423d;color:#f0f5e9;border-color:#59b8aa}
 .module-nav button.active{background:#28766e;color:#f4f7e9;border-color:#53b8ad;box-shadow:0 3px 0 #0002}
 .module-nav button.active:hover{background:#348b80}
+
+.player-directory-wrap{overflow:auto}.player-directory-table{min-width:980px}.player-directory-table th,.player-directory-table td{text-align:left;vertical-align:middle}.player-directory-table td{padding:8px}.player-directory-table input,.player-directory-table select{width:100%;min-width:80px}.player-directory-table td:first-child input{width:70px;min-width:60px;text-align:center}.player-directory-table td:last-child{white-space:nowrap}.player-delete:disabled{opacity:.5}

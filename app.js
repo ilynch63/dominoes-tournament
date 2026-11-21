@@ -1,12 +1,15 @@
 'use strict';
-const D=Domino,KEY='domino-tournament-v2',isTV=new URLSearchParams(location.search).has('tv'),moduleFromLocation=()=>{const selected=new URLSearchParams(location.search).get('module');return ['tournament','date','statistics'].includes(selected)?selected:location.pathname.endsWith('/statistics.html')?'statistics':'tournament';};
+const D=Domino,KEY='domino-tournament-v2',isTV=new URLSearchParams(location.search).has('tv'),moduleFromLocation=()=>{const selected=new URLSearchParams(location.search).get('module');return ['tournament','date','statistics','players'].includes(selected)?selected:location.pathname.endsWith('/statistics.html')?'statistics':'tournament';};
 let activeModule=isTV?'tournament':moduleFromLocation();
-let state={version:3,title:'Endless Bonchones -- Domino',players:window.playerDirectory.map(p=>p.firstName),tables:6,rounds:[],playoffs:null,updated:null},view='registration',roundIndex=0,tvPage=0,tvMode='auto',saveOK=true,loadError=false;
+let state={version:3,title:'Endless Bonchones -- Domino',players:window.playerDirectory.map(p=>p.firstName),playerIds:window.playerDirectory.map(p=>String(p.id)),tables:6,rounds:[],playoffs:null,updated:null},view='registration',roundIndex=0,tvPage=0,tvMode='auto',saveOK=true,loadError=false;
 if(state.players.length<16)state.players=Array.from({length:24},(_,i)=>`Player ${i+1}`);
 const tvPageSize=()=>window.innerHeight<850?8:12;
 const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 try{const saved=localStorage.getItem(KEY);if(saved){state=D.validate(JSON.parse(saved));if(state.title==='Hawaiian domino')state.title='Endless Bonchones -- Domino';view=state.rounds.length?'rounds':'registration';}}catch(e){saveOK=false;loadError=true;}
-function navigateModule(next){if(!['tournament','date','statistics'].includes(next)||next===activeModule)return;activeModule=next;const url=new URL(location.href);url.pathname=url.pathname.replace(/(?:Domino-Night|statistics)\.html$/,'Domino-Night.html');if(next==='tournament')url.searchParams.delete('module');else url.searchParams.set('module',next);history.pushState({module:next},'',url.href);render();}
+const playerNameKey=name=>String(name).trim().toLocaleLowerCase();
+function playerIdsForNames(names){const lookup=new Map(window.playerDirectory.map(p=>[playerNameKey(p.firstName),String(p.id)]));return names.map((name,i)=>lookup.get(playerNameKey(name))??state.playerIds?.[i]??null);}
+if(!Array.isArray(state.playerIds)||state.playerIds.length!==state.players.length){const lookup=new Map(window.playerDirectory.map(p=>[playerNameKey(p.firstName),String(p.id)]));state.playerIds=state.players.map(name=>lookup.get(playerNameKey(name))??null);}
+function navigateModule(next){if(!['tournament','date','statistics','players'].includes(next)||next===activeModule)return;activeModule=next;const url=new URL(location.href);url.pathname=url.pathname.replace(/(?:Domino-Night|statistics)\.html$/,'Domino-Night.html');if(next==='tournament')url.searchParams.delete('module');else url.searchParams.set('module',next);history.pushState({module:next},'',url.href);render();}
 window.addEventListener('popstate',()=>{if(!isTV){activeModule=moduleFromLocation();render();}});
 let channel;try{channel=new BroadcastChannel(KEY);}catch{}
 function tell(t){$('toast').textContent=t;clearTimeout(tell.timer);tell.timer=setTimeout(()=>$('toast').textContent='',6500);}
@@ -15,6 +18,7 @@ function save(){if(loadError){tell('Restore a valid backup or explicitly start a
 function receive(s){if(!isTV)return;try{state=D.validate(s);render();}catch{}}
 if(channel)channel.onmessage=e=>receive(e.data);
 window.addEventListener('storage',e=>{if(e.key===KEY&&e.newValue)try{receive(JSON.parse(e.newValue));}catch{}});
+window.addEventListener('storage',e=>{if(e.key==='domino-player-directory-v1'&&e.newValue)try{window.playerDirectory=JSON.parse(e.newValue);syncHistoryDirectory();render();}catch{}});
 function download(name,data,type){const url=URL.createObjectURL(new Blob([data],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);}
 function backup(){download('domino-night-backup-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json',JSON.stringify(state,null,2),'application/json');tell('Backup downloaded. Keep it with your event files.');}
 function exportCSV(){let rows=[['Rank','Player','Played','Wins','Win %','Points','Average points','Scheduled byes']];D.standings(state).forEach((p,i)=>rows.push([rankAt(D.standings(state),i),p.name,p.played,p.wins,p.played?(p.wins/p.played*100).toFixed(2):'',p.points,p.played?(p.points/p.played).toFixed(2):'',p.byes]));const safe=x=>'"'+String(x).replace(/^[=+@-]/,"'$&").replaceAll('"','""')+'"';download('domino-night-standings.csv',rows.map(r=>r.map(safe).join(',')).join('\r\n'),'text/csv;charset=utf-8');}
@@ -22,6 +26,52 @@ function team(t){return t.map(i=>esc(state.players[i])).join(' <span class="mute
 function rankAt(rows,i){if(state.playoffs)return i+1;let j=i;while(j>0&&rows[j].played&&rows[j-1].played&&D.compare(rows[j-1],rows[j])===0)j--;return rows[i].played?j+1:'-';}
 function nextRound(){const i=state.rounds.findIndex(r=>r.matches.some(m=>!m.score));return i<0?Math.max(0,state.rounds.length-1):i;}
 const playoffSize=()=>state.playoffs&&!state.playoffs.quarters?8:16;
+function syncHistoryDirectory(){
+ const current=new Map(window.playerDirectory.map(p=>[String(p.id),{id:String(p.id),name:String(p.firstName).trim()||`Player ${p.id}`,aliases:[]} ]));
+ const referenced=new Set();
+ for(const event of historyBase.events)for(const match of event.matches)for(const id of match.teams.flat())referenced.add(String(id));
+ if(state.rounds.length)for(const id of state.playerIds??[])if(id!==null&&id!==undefined)referenced.add(String(id));
+ for(const person of historyBase.players)if(referenced.has(person.id)&&!current.has(person.id))current.set(person.id,person);
+ historyBase.players=[...current.values()];historyBase.defaultPlayers=window.playerDirectory.map(p=>String(p.id));rebuildHistory();
+}
+function playerHasRecordedGames(person){
+ const id=String(person.id);
+ if(historyData.events.some(event=>event.matches.some(match=>match.teams.some(team=>team.some(playerId=>String(playerId)===id)))))return true;
+ const indices=(state.playerIds??[]).flatMap((playerId,index)=>String(playerId)===id?[index]:[]);
+ const matches=[...state.rounds.flatMap(round=>round.matches),...(state.playoffs?.quarters??[]),...(state.playoffs?.semis??[]),...(state.playoffs?.final?[state.playoffs.final]:[])];
+ return matches.some(match=>match?.teams?.some(team=>team.some(index=>indices.includes(index))));
+}
+function playersView(){
+ const rows=window.playerDirectory.map(person=>{const locked=playerHasRecordedGames(person);return `<tr><td><input value="${person.id}" aria-label="Player ID ${person.id}" readonly></td><td><input data-player-id="${person.id}" data-player-field="firstName" aria-label="First name for player ${person.id}" value="${esc(person.firstName)}"></td><td><select data-player-id="${person.id}" data-player-field="gender" aria-label="Gender for player ${person.id}"><option value="" ${person.gender?'':'selected'}></option><option value="F" ${person.gender==='F'?'selected':''}>F</option><option value="M" ${person.gender==='M'?'selected':''}>M</option></select></td><td><input data-player-id="${person.id}" data-player-field="fullName" aria-label="Full name for player ${person.id}" value="${esc(person.fullName??'')}"></td><td><input data-player-id="${person.id}" data-player-field="description" aria-label="Description for player ${person.id}" value="${esc(person.description??'')}"></td><td><input data-player-id="${person.id}" data-player-field="image" aria-label="Image for player ${person.id}" value="${esc(person.image??'')}"></td><td><button type="button" class="danger player-delete" data-delete-player="${person.id}" ${locked?'disabled title="This player appears in a recorded game."':''}>Delete</button>${locked?'<span class="small muted">In a game</span>':''}</td></tr>`;}).join('');
+ return `<section class="panel"><div class="sectionbar"><div><h2>Players</h2><p class="small muted">Changes save automatically in this browser and are shared by the application modules.</p></div><button type="button" id="addPlayer" class="primary">Add player</button></div><div class="table-wrap player-directory-wrap"><table class="player-directory-table"><thead><tr><th>ID</th><th>First Name</th><th>Gender</th><th>Full Name</th><th>Description</th><th>Image</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
+}
+function persistPlayerDirectory(){
+ try{localStorage.setItem('domino-player-directory-v1',JSON.stringify(window.playerDirectory));syncHistoryDirectory();return true;}
+ catch{tell('Could not save the shared player list in this browser.');return false;}
+}
+function bindPlayerDirectory(){
+ document.querySelectorAll('[data-player-field]').forEach(input=>input.addEventListener(input.tagName==='SELECT'?'change':'input',()=>{
+  const person=window.playerDirectory.find(p=>String(p.id)===input.dataset.playerId);if(!person)return;
+  const field=input.dataset.playerField,old=person[field]??'',value=input.value;person[field]=value;
+  const oldNames=state.players.slice();
+  if(field==='firstName')state.players=state.players.map((name,index)=>String(state.playerIds?.[index])===String(person.id)?value:name);
+  if(!persistPlayerDirectory()){person[field]=old;state.players=oldNames;input.value=old;return;}
+  if(field==='firstName'&&state.players.some((name,index)=>name!==oldNames[index]))save();
+ }));
+ $('addPlayer').onclick=()=>{
+  const id=Math.max(0,...window.playerDirectory.map(p=>Number(p.id)||0))+1,person={id,firstName:`Player ${id}`,gender:'',fullName:'',description:'',image:''};
+  window.playerDirectory.push(person);const addToEvent=!state.rounds.length;if(addToEvent){state.players.push(person.firstName);state.playerIds.push(String(id));}
+  if(!persistPlayerDirectory()){window.playerDirectory.pop();if(addToEvent){state.players.pop();state.playerIds.pop();}return;}
+  if(addToEvent)save();render();document.querySelector(`[data-player-id="${id}"][data-player-field="firstName"]`)?.focus();
+ };
+ document.querySelectorAll('[data-delete-player]').forEach(button=>button.onclick=()=>{
+  const id=button.dataset.deletePlayer,position=window.playerDirectory.findIndex(p=>String(p.id)===id),person=window.playerDirectory[position];if(!person||playerHasRecordedGames(person))return;
+  const oldPlayers=state.players.slice(),oldIds=(state.playerIds??[]).slice();window.playerDirectory=window.playerDirectory.filter(p=>String(p.id)!==id);
+  if(!state.rounds.length){const keep=state.playerIds.map((playerId,index)=>String(playerId)!==id?index:-1).filter(index=>index>=0);state.players=keep.map(index=>state.players[index]);state.playerIds=keep.map(index=>state.playerIds[index]);}
+  if(!persistPlayerDirectory()){window.playerDirectory.splice(position,0,person);state.players=oldPlayers;state.playerIds=oldIds;return;}
+  if(!state.rounds.length)save();render();
+ });
+}
 function stats(){const done=state.rounds.filter(r=>r.matches.length>0&&r.matches.every(m=>m.score)).length;return `<div class="stats"><div class="stat"><b>${state.players.length}</b><span>Registered players</span></div><div class="stat"><b>${state.tables}</b><span>Available tables</span></div><div class="stat"><b>${done} / ${state.rounds.length||D.requiredRounds(state.players.length)}</b><span>Qualifying rounds</span></div><div class="stat"><b>${state.playoffs?`${playoffSize()/2} teams`:'Top 16'}</b><span>${state.playoffs?'Playoff bracket':'Players advance'}</span></div></div>`;}
 // Measure the TV content at each scale so wrapping is included in the fit.
 function fitTV(){
@@ -57,13 +107,14 @@ function render(){
  document.body.classList.toggle('tv',isTV);$('eventTitle').textContent=state.title;
  if(isTV&&!$('tvStage')){const stage=document.createElement('div');stage.id='tvStage';const header=document.querySelector('body>header'),shell=document.querySelector('body>.shell');document.body.insertBefore(stage,header);stage.append(header,shell);}
 
- $('headerActions').innerHTML=isTV?'<button id="fullscreen">Full screen</button><button id="tvToggle">Switch view</button>':activeModule==='date'?'':'<button id="tvOpen">Open TV display ↗</button><button id="export">Export backup</button><button id="import">Restore backup</button><input id="file" type="file" accept=".json,application/json" hidden>';
- $('moduleNav').innerHTML=isTV?'':[['tournament','Tournament'],['date','Dominoes Date'],['statistics','Statistics']].map(([id,name])=>`<button type="button" data-module="${id}" class="${activeModule===id?'active':''}" aria-pressed="${activeModule===id}">${name}</button>`).join('');
+ $('headerActions').innerHTML=isTV?'<button id="fullscreen">Full screen</button><button id="tvToggle">Switch view</button>':['date','players'].includes(activeModule)?'':'<button id="tvOpen">Open TV display ↗</button><button id="export">Export backup</button><button id="import">Restore backup</button><input id="file" type="file" accept=".json,application/json" hidden>';
+ $('moduleNav').innerHTML=isTV?'':[['tournament','Tournament'],['date','Dominoes Date'],['statistics','Statistics'],['players','Players']].map(([id,name])=>`<button type="button" data-module="${id}" class="${activeModule===id?'active':''}" aria-pressed="${activeModule===id}">${name}</button>`).join('');
  document.querySelectorAll('[data-module]').forEach(b=>b.onclick=()=>navigateModule(b.dataset.module));
  $('nav').innerHTML=isTV||activeModule!=='tournament'?'':[['registration','Players'],['rounds','Qualifying rounds'],['standings','Standings'],['playoffs','Playoffs'],['rules','Rules & help']].map(([id,name])=>`<button data-view="${id}" class="${view===id?'active':''}">${name}</button>`).join('')+`<span class="status">${saveOK?'Saved on this browser':'Storage needs attention'}${state.updated?' · '+new Date(state.updated).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}):''}</span>`;
- $('footer').textContent=activeModule==='date'?'':isTV?'Live display · Updates from the organizer tab on this computer · '+(state.updated?'Last saved '+new Date(state.updated).toLocaleTimeString():'Waiting for registration'):'Works offline on this computer. Keep one organizer tab open. Export backups after each round. The TV view follows this browser; it is not a remote scoring link.';
+ $('footer').textContent=['date','players'].includes(activeModule)?'':isTV?'Live display · Updates from the organizer tab on this computer · '+(state.updated?'Last saved '+new Date(state.updated).toLocaleTimeString():'Waiting for registration'):'Works offline on this computer. Keep one organizer tab open. Export backups after each round. The TV view follows this browser; it is not a remote scoring link.';
  if(isTV){renderTV();$('fullscreen').onclick=toggleFullscreen;$('tvToggle').onclick=()=>{tvMode=tvMode==='auto'?'standings':'auto';renderTV();};return;}
  if(activeModule==='date'){$('main').innerHTML='';return;}
+ if(activeModule==='players'){$('main').innerHTML=playersView();bindPlayerDirectory();return;}
  $('main').innerHTML=activeModule==='statistics'?historyView():loadError?'<div class="notice"><b>The saved event could not be loaded.</b> Your stored data has not been overwritten. Restore a backup, or start a new event below.</div><button id="recoverNew" class="danger">Start a new event</button>':stats()+extensionNotice()+({registration:registration,rounds:roundsView,standings:standingsView,playoffs:playoffsView,rules:rulesView}[view]());
  const historyExportButton=document.createElement('button');historyExportButton.textContent='Export history';historyExportButton.onclick=()=>{historyTab='manage';if(activeModule==='statistics')render();else navigateModule('statistics');};$('headerActions').append(historyExportButton);
  document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;render();});
@@ -152,8 +203,8 @@ function bind(){
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{view=b.dataset.go;render();});document.querySelectorAll('[data-round]').forEach(b=>b.onclick=()=>{roundIndex=Number(b.dataset.round);render();});document.querySelectorAll('[data-score]').forEach(b=>b.onclick=()=>saveScore(b.dataset.score));
  if($('print'))$('print').onclick=()=>window.print();if($('csv'))$('csv').onclick=exportCSV;
  if($('applyCount'))$('applyCount').onclick=()=>{const n=Number($('countInput').value);if(!Number.isInteger(n)||n<16||n>48)return tell('Use 16 to 48 players.');let names=$('namesInput').value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);while(names.length<n)names.push(`Player ${names.length+1}`);$('namesInput').value=names.slice(0,n).join('\n');tell('Player slots updated. Save names when ready.');};
- if($('savePlayers'))$('savePlayers').onclick=()=>{try{const p=readPlayers();Object.assign(state,{title:p.title,players:p.names,tables:p.tables});save();render();tell('Names saved.');}catch(e){tell(e.message);}};
- if($('generate'))$('generate').onclick=async()=>{try{const p=readPlayers();if(p.names.length<16)throw Error('At least 16 players are required for the three-round playoffs.');if(!(await ask('Lock registration & generate rounds?',`${p.names.length} players on ${p.tables} tables. ${D.requiredRounds(p.names.length)} qualifying rounds guarantee exactly four matches per player. ${p.names.length%4?'Byes rotate; the last round may use fewer tables. ':''}You can rename players afterward, but changing the player count requires a new event.`,'Generate schedule')))return;$('generate').disabled=true;$('generate').textContent='Preparing tables…';await new Promise(r=>setTimeout(r,30));const rounds=D.schedule(p.names.length,p.tables);Object.assign(state,{version:3,title:p.title,players:p.names,tables:p.tables,rounds,playoffs:null});save();view='rounds';roundIndex=0;render();tell(`${rounds.length} rounds ready. Every player has exactly four matches and no repeated teammate.`);}catch(e){tell(e.message);render();}};
+ if($('savePlayers'))$('savePlayers').onclick=()=>{try{const p=readPlayers();Object.assign(state,{title:p.title,players:p.names,playerIds:playerIdsForNames(p.names),tables:p.tables});save();render();tell('Names saved.');}catch(e){tell(e.message);}};
+ if($('generate'))$('generate').onclick=async()=>{try{const p=readPlayers();if(p.names.length<16)throw Error('At least 16 players are required for the three-round playoffs.');if(!(await ask('Lock registration & generate rounds?',`${p.names.length} players on ${p.tables} tables. ${D.requiredRounds(p.names.length)} qualifying rounds guarantee exactly four matches per player. ${p.names.length%4?'Byes rotate; the last round may use fewer tables. ':''}You can rename players afterward, but changing the player count requires a new event.`,'Generate schedule')))return;$('generate').disabled=true;$('generate').textContent='Preparing tables…';await new Promise(r=>setTimeout(r,30));const rounds=D.schedule(p.names.length,p.tables);Object.assign(state,{version:3,title:p.title,players:p.names,playerIds:playerIdsForNames(p.names),tables:p.tables,rounds,playoffs:null});save();view='rounds';roundIndex=0;render();tell(`${rounds.length} rounds ready. Every player has exactly four matches and no repeated teammate.`);}catch(e){tell(e.message);render();}};
  if($('cut'))$('cut').onclick=async()=>{if(await ask('Draw ties & create playoffs?','Review all scores first. Exact ties will be resolved randomly once, and the top sixteen will become eight fixed teams. Show the draw record to players.','Run draw & create teams')){backup();state.playoffs=D.createPlayoffs(state);save();view='playoffs';render();tell('Playoff teams created. The random draw order is saved in Standings.');}};
  if($('newEvent'))$('newEvent').onclick=async()=>{if(await ask('Start a new event?','Export a backup first if you need this event. This clears the schedule, results, and playoff draw, while keeping your current player list.','Start new event')){backup();state.version=3;state.rounds=[];state.playoffs=null;delete state.historyId;delete state.historyDate;save();view='registration';render();}};
  if($('printSchedule'))$('printSchedule').onclick=()=>{$('main').innerHTML=state.rounds.map((r,i)=>`<section class="round-print">${roundBlock(i,true)}</section>`).join('');window.print();render();};
@@ -163,7 +214,8 @@ async function saveScore(id){const target=id==='f'?120:100;const aText=$(id+'-0'
  if(parts[0]==='s'&&state.playoffs.final?.score){if(!await ask('Clear the final result?','Changing a semifinal requires rebuilding the final. Its saved result will be cleared.','Update semifinal'))return;backup();}
  if(parts[0]==='p'&&(state.playoffs.semis[Math.floor(Number(parts[1])/2)]?.score||state.playoffs.final?.score)){if(!await ask('Clear later playoff results?','Changing this quarterfinal rebuilds its semifinal and the final. Their saved results will be cleared; the other semifinal is kept.','Update quarterfinal'))return;backup();}
  m.score=[a,b];if(id==='f')m.target=120;if(parts[0]==='p')D.syncQuarter(state.playoffs,Number(parts[1]));if(parts[0]==='s')D.syncFinal(state.playoffs);save();render();tell('Result saved. Standings and TV display updated.');}
-async function restore(e){const file=e.target.files[0];if(!file)return;try{if(file.size>1000000)throw Error('Backup file is too large.');const parsed=D.validate(JSON.parse(await file.text()));if(await ask('Restore this event?',`Load “${parsed.title}” with ${parsed.players.length} players? This replaces the event in this browser. Export the current event first if needed.`,'Restore event')){if(!loadError)backup();state=parsed;loadError=false;save();view=state.rounds.length?'rounds':'registration';roundIndex=0;render();tell('Backup restored.');}}catch(err){tell('Could not restore: '+err.message);}}
+async function restore(e){const file=e.target.files[0];if(!file)return;try{if(file.size>1000000)throw Error('Backup file is too large.');const parsed=D.validate(JSON.parse(await file.text()));if(await ask('Restore this event?',`Load “${parsed.title}” with ${parsed.players.length} players? This replaces the event in this browser. Export the current event first if needed.`,'Restore event')){if(!loadError)backup();state=parsed;if(!Array.isArray(state.playerIds))state.playerIds=playerIdsForNames(state.players);loadError=false;save();view=state.rounds.length?'rounds':'registration';roundIndex=0;render();tell('Backup restored.');}}catch(err){tell('Could not restore: '+err.message);}}
 if(isTV){setInterval(()=>{if(tvMode==='standings'||!state.rounds.length)return;tvPage=(tvPage+1)%Math.ceil(state.players.length/tvPageSize());renderTV();},12000);window.addEventListener('resize',()=>renderTV());document.addEventListener('fullscreenchange',()=>renderTV());document.fonts?.ready.then(fitTV);}
+syncHistoryDirectory();
 render();
 refreshHistory().then(()=>{if(activeModule==='statistics')render();});

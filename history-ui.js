@@ -17,7 +17,7 @@ function matchingHistoryEvent(s){return historyData.events.find(e=>e.id===s.hist
 async function refreshHistory(){
  if(location.protocol==='file:'){historyStatus='Bundled history · offline file';return;}
  historyLoading=true;
- try{const response=await fetch('dominos-tournament-data.json',{cache:'no-store',signal:AbortSignal.timeout(8000)});if(!response.ok)throw Error('HTTP '+response.status);const data=H.validate(await response.json());historyBase=data;historyStatus='Loaded from dominos-tournament-data.json';rebuildHistory();}
+ try{const response=await fetch('dominos-tournament-data.json',{cache:'no-store',signal:AbortSignal.timeout(8000)});if(!response.ok)throw Error('HTTP '+response.status);const data=H.validate(await response.json());historyBase=data;historyStatus='Loaded from dominos-tournament-data.json';if(typeof syncHistoryDirectory==='function')syncHistoryDirectory();else rebuildHistory();}
  catch(e){historyStatus='Bundled history · refresh failed';tell('Could not refresh shared history. The bundled copy is available; check your connection before exporting.');}
  finally{historyLoading=false;}
 }
@@ -44,7 +44,7 @@ function refreshLiveHistory(){
 }
 function matchProbability(m){
  if(m.score)return '';const lookup=new Map(historyData.players.flatMap(p=>[p.name,...(p.aliases??[])].map(n=>[H.normalize(n),p.id])));
- const teams=m.teams.map(t=>t.map(i=>lookup.get(H.normalize(state.players[i]))??H.playerId(state.players[i]))),prediction=H.predict(historyLiveSummary??historySummary,teams);
+ const teams=m.teams.map(t=>t.map(i=>String(state.playerIds?.[i]??lookup.get(H.normalize(state.players[i]))??H.playerId(state.players[i])))),prediction=H.predict(historyLiveSummary??historySummary,teams);
  return `<p class="match-probability small">${prediction.probability===null?'Win probability unavailable · both pairs need history':`Win probability · ${historyPercent(prediction.probability)} / ${historyPercent(1-prediction.probability)}`}<br><span class="muted">Workbook pair formula${m.score?'':' · saved results included'}</span></p>`;
 }
 function historyView(){

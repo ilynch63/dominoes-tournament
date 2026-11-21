@@ -9,11 +9,11 @@ const dateOK=s=>typeof s==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(s)&&Number.isFin
 const textOK=(s,max=200)=>typeof s==='string'&&s.trim().length>0&&s.length<=max;
 function validate(data){
  if(!data||data.schemaVersion!==1||data.ratingModel!==MODEL||!Array.isArray(data.players)||!Array.isArray(data.events))throw Error('Unsupported tournament history format or rating model.');
- const ids=new Set(),names=new Set(),events=new Set(),legacyKeys=new Set();
+ const ids=new Set(),events=new Set(),legacyKeys=new Set();
  for(const p of data.players){
   if(!textOK(p.id)||!textOK(p.name,70)||ids.has(p.id)||!Array.isArray(p.aliases??[]))throw Error('Invalid or duplicate player.');
   ids.add(p.id);
-  for(const name of [p.name,...(p.aliases??[])]){if(!textOK(name,70)||names.has(normalize(name)))throw Error('Player names and aliases must be unique.');names.add(normalize(name));}
+  for(const name of [p.name,...(p.aliases??[])])if(!textOK(name,70))throw Error('Invalid player name or alias.');
  }
  for(const e of data.events){
   if(!textOK(e.id)||events.has(e.id)||!textOK(e.title)||!dateOK(e.date)||!Array.isArray(e.matches))throw Error('Invalid or duplicate event.');
@@ -73,7 +73,7 @@ function fingerprint(state){
 function eventFromState(state,data,metadata){
  if(!dateOK(metadata.date)||!textOK(metadata.id))throw Error('Choose an event date and identity.');
  const players=clone(data.players),lookup=new Map();for(const p of players)for(const n of [p.name,...(p.aliases??[])])lookup.set(normalize(n),p.id);
- const roster=state.players.map(name=>{const n=normalize(name);if(lookup.has(n))return lookup.get(n);let id=playerId(name);if(players.some(p=>p.id===id))throw Error('Player identity collision: '+name);players.push({id,name:name.trim(),aliases:[]});lookup.set(n,id);return id;});
+ const roster=state.players.map((name,index)=>{const sharedId=state.playerIds?.[index];if(sharedId!==null&&sharedId!==undefined&&players.some(p=>p.id===String(sharedId)))return String(sharedId);const n=normalize(name);if(lookup.has(n))return lookup.get(n);let id=playerId(name);if(players.some(p=>p.id===id))throw Error('Player identity collision: '+name);players.push({id,name:name.trim(),aliases:[]});lookup.set(n,id);return id;});
  const matches=[];let order=0;
  const add=(m,id,stage,target=100)=>{if(!m)return;matches.push({id,order:order++,stage,target,teams:m.teams.map(t=>t.map(i=>roster[i])),score:m.score?m.score.slice():null,...(m.table?{table:m.table,wave:m.wave}:{})});};
  state.rounds.forEach((r,i)=>r.matches.forEach((m,j)=>add(m,`q-${i}-${j}`,`Qualifying ${i+1}`)));
