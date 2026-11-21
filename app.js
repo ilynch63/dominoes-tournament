@@ -3,6 +3,13 @@ window.playerDirectory=(window.playerDirectory??[]).map(person=>({...person,show
 const D=Domino,KEY='domino-tournament-v2',isTV=new URLSearchParams(location.search).has('tv'),moduleFromLocation=()=>{const selected=new URLSearchParams(location.search).get('module');return ['tournament','date','statistics','players'].includes(selected)?selected:'statistics';};
 let activeModule=isTV?'tournament':moduleFromLocation();
 let dateStore=DominoDates.load(),openDateIds=new Set();
+{
+ const sourceEvents=JSON.parse(document.getElementById('historySeed').textContent).events;
+ const titles=new Map(sourceEvents.filter(event=>event.source?.kind==='endless-bonchones').map(event=>[event.date,event.title]));
+ let changed=false;
+ for(const event of dateStore.dates)if(event.type==='Endless Bonchones'&&!event.description&&titles.has(event.date)){event.description=titles.get(event.date);changed=true;}
+ if(changed)try{DominoDates.persist(dateStore);}catch{}
+}
 if(dateStore.dates.length)openDateIds.add(dateStore.dates.slice().sort((a,b)=>b.date.localeCompare(a.date))[0].id);
 let state={version:3,title:'Endless Bonchones -- Domino',players:window.playerDirectory.map(p=>p.firstName),playerIds:window.playerDirectory.map(p=>String(p.id)),tables:6,rounds:[],playoffs:null,updated:null},view='registration',roundIndex=0,tvPage=0,tvMode='auto',saveOK=true,loadError=false;
 if(state.players.length<16)state.players=Array.from({length:24},(_,i)=>`Player ${i+1}`);
@@ -31,7 +38,10 @@ function rankAt(rows,i){if(state.playoffs)return i+1;let j=i;while(j>0&&rows[j].
 function nextRound(){const i=state.rounds.findIndex(r=>r.matches.some(m=>!m.score));return i<0?Math.max(0,state.rounds.length-1):i;}
 const playoffSize=()=>state.playoffs&&!state.playoffs.quarters?8:16;
 function syncHistoryDirectory(force=false){
- historyBase.events=historyBase.events.filter(event=>!/^date-/.test(String(event.id))).concat(DominoDates.historyEvents(dateStore));
+ const bundledEvents=historyBase.events.filter(event=>!/^date-/.test(String(event.id)));
+ const mirroredDates=new Set(bundledEvents.map(event=>event.source?.kind==='workbook'?`${event.date}|Wednesday Group`:event.source?.kind==='endless-bonchones'?`${event.date}|Endless Bonchones`:null).filter(Boolean));
+ const dateEvents=DominoDates.historyEvents(dateStore).filter(event=>!mirroredDates.has(`${event.date}|${event.eventType}`));
+ historyBase.events=bundledEvents.concat(dateEvents);
  const current=new Map(window.playerDirectory.map(p=>[String(p.id),{id:String(p.id),name:String(p.firstName).trim()||`Player ${p.id}`,aliases:[]} ]));
  const referenced=new Set();
  for(const event of historyBase.events)for(const match of event.matches)for(const id of match.teams.flat())referenced.add(String(id));
