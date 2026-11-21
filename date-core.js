@@ -22,7 +22,7 @@ function load(){
 }
 function persist(data){validate(data);localStorage.setItem(KEY,JSON.stringify(data));}
 function historyEvents(data){
- return data.dates.map(event=>({id:event.id,title:event.type,eventType:event.type,description:event.description,date:event.date,source:{kind:event.type==='Wednesday Group'?'workbook':'endless-bonchones',file:event.type==='Wednesday Group'?'Wed.xlsm':'EB.xlsm'},matches:event.games.flatMap((game,order)=>{
+ return data.dates.map(event=>({id:event.id,title:event.type,eventType:event.type,description:event.description,date:event.date,source:{kind:event.type==='Wednesday Group'?'workbook':'endless-bonchones',file:event.type==='Wednesday Group'?'Wed.xlsm':String(event.id).startsWith('date-tournament-')?'Tournament module':'EB.xlsm'},matches:event.games.flatMap((game,order)=>{
   const participants=[...game.team1,...game.team2];
   if(participants.some(id=>!id)||new Set(participants).size!==4)return [];
   const scored=game.score1!==null&&game.score2!==null&&Math.max(game.score1,game.score2)>=100&&Math.min(game.score1,game.score2)<100;
