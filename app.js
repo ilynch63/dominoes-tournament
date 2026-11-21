@@ -1,5 +1,5 @@
 'use strict';
-const D=Domino,KEY='domino-tournament-v2',isTV=new URLSearchParams(location.search).has('tv'),moduleFromLocation=()=>{const selected=new URLSearchParams(location.search).get('module');return ['tournament','date','statistics','players'].includes(selected)?selected:location.pathname.endsWith('/statistics.html')?'statistics':'tournament';};
+const D=Domino,KEY='domino-tournament-v2',isTV=new URLSearchParams(location.search).has('tv'),moduleFromLocation=()=>{const selected=new URLSearchParams(location.search).get('module');return ['tournament','date','statistics','players'].includes(selected)?selected:'statistics';};
 let activeModule=isTV?'tournament':moduleFromLocation();
 let dateStore=DominoDates.load(),openDateIds=new Set();
 if(dateStore.dates.length)openDateIds.add(dateStore.dates.slice().sort((a,b)=>b.date.localeCompare(a.date))[0].id);
@@ -152,7 +152,7 @@ function render(){
  if(isTV&&!$('tvStage')){const stage=document.createElement('div');stage.id='tvStage';const header=document.querySelector('body>header'),shell=document.querySelector('body>.shell');document.body.insertBefore(stage,header);stage.append(header,shell);}
 
  $('headerActions').innerHTML=isTV?'<button id="fullscreen">Full screen</button><button id="tvToggle">Switch view</button>':['date','players'].includes(activeModule)?'':'<button id="tvOpen">Open TV display ↗</button><button id="export">Export backup</button><button id="import">Restore backup</button><input id="file" type="file" accept=".json,application/json" hidden>';
- $('moduleNav').innerHTML=isTV?'':[['tournament','Tournament'],['date','Games'],['statistics','Statistics'],['players','Players']].map(([id,name])=>`<button type="button" data-module="${id}" class="${activeModule===id?'active':''}" aria-pressed="${activeModule===id}">${name}</button>`).join('');
+ $('moduleNav').innerHTML=isTV?'':[['players','Players'],['date','Games'],['statistics','Statistics'],['tournament','Tournament']].map(([id,name])=>`<button type="button" data-module="${id}" class="${activeModule===id?'active':''}" aria-pressed="${activeModule===id}">${name}</button>`).join('');
  document.querySelectorAll('[data-module]').forEach(b=>b.onclick=()=>navigateModule(b.dataset.module));
  $('nav').innerHTML=isTV||activeModule!=='tournament'?'':[['registration','Players'],['rounds','Qualifying rounds'],['standings','Standings'],['playoffs','Playoffs'],['rules','Rules & help']].map(([id,name])=>`<button data-view="${id}" class="${view===id?'active':''}">${name}</button>`).join('')+`<span class="status">${saveOK?'Saved on this browser':'Storage needs attention'}${state.updated?' · '+new Date(state.updated).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}):''}</span>`;
  $('footer').textContent=['date','players'].includes(activeModule)?'':isTV?'Live display · Updates from the organizer tab on this computer · '+(state.updated?'Last saved '+new Date(state.updated).toLocaleTimeString():'Waiting for registration'):'Works offline on this computer. Keep one organizer tab open. Export backups after each round. The TV view follows this browser; it is not a remote scoring link.';
