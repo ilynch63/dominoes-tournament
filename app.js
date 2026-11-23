@@ -185,7 +185,7 @@ async function toggleFullscreen(){
 }
 function render(){
  refreshLiveHistory();
- document.body.classList.toggle('tv',isTV);$('eventTitle').textContent=state.title;
+ document.body.classList.toggle('tv',isTV);$('eventTitle').textContent='Endless Bonchones -- Domino';
  if(isTV&&!$('tvStage')){const stage=document.createElement('div');stage.id='tvStage';const header=document.querySelector('body>header'),shell=document.querySelector('body>.shell');document.body.insertBefore(stage,header);stage.append(header,shell);}
 
  $('headerActions').innerHTML=isTV?'<button id="fullscreen">Full screen</button><button id="tvToggle">Switch view</button>':['date','players'].includes(activeModule)?'':'<button id="tvOpen">Open TV display ↗</button><button id="export">Export backup</button><button id="import">Restore backup</button><input id="file" type="file" accept=".json,application/json" hidden>';

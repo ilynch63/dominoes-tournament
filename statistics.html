@@ -510,7 +510,7 @@ function matchProbability(m){
 function historyView(){
  const summary=H.summarize(historyData,{source:historySource,eventId:historyEvent});
  const scored=summary.games.length,events=new Set(summary.games.map(m=>m.eventId)).size,players=[...summary.players.values()].filter(p=>p.played&&historyEntryVisible(p)).length,pairs=[...summary.pairs.values()].filter(p=>p.played&&historyEntryVisible(p,true)).length;
- return `<section class="history-heading"><p class="eyebrow">THE LONG GAME</p><h2>Your domino record, together.</h2><p class="muted">Player and partnership statistics, head-to-head records, and ELO-based win probabilities. Calculations use the Wednesday Group formulas for the selected results.</p></section>${historyFilterControls(summary)}<div class="history-calc-controls"><button id="historyRecalculate" class="primary">Recalculate statistics</button><fieldset><legend>Calculation mode</legend><label><input type="radio" name="historyCalcMode" value="automatic" ${historyAutoRecalculate?'checked':''}> Automatic</label><label><input type="radio" name="historyCalcMode" value="manual" ${historyAutoRecalculate?'':'checked'}> Manual</label></fieldset><span class="small muted" aria-live="polite">${historyStale?'Changes pending recalculation':'Statistics are up to date'}</span></div>
+ return `${historyFilterControls(summary)}<div class="history-calc-controls"><button id="historyRecalculate" class="primary">Recalculate statistics</button><fieldset><legend>Calculation mode</legend><label><input type="radio" name="historyCalcMode" value="automatic" ${historyAutoRecalculate?'checked':''}> Automatic</label><label><input type="radio" name="historyCalcMode" value="manual" ${historyAutoRecalculate?'':'checked'}> Manual</label></fieldset><span class="small muted" aria-live="polite">${historyStale?'Changes pending recalculation':'Statistics are up to date'}</span></div>
  <div class="stats"><div class="stat"><b>${scored}</b><span>Completed games</span></div><div class="stat"><b>${events}</b><span>Dates with results</span></div><div class="stat"><b>${players}</b><span>Players</span></div><div class="stat"><b>${pairs}</b><span>Partnerships</span></div></div>
  ${historyError?`<div class="notice" role="alert">${esc(historyError)}</div>`:''}
  ${historyConflicts.length?`<div class="notice" role="alert"><b>Shared history changed while you had local drafts.</b><p>Export is paused. Review the affected records: ${historyConflicts.map(c=>esc(c.title)).join(', ')}.</p><button id="historyUsePublished">Discard local drafts and use shared history</button><button id="historyKeepDrafts">Keep my versions of conflicting events</button></div>`:''}
@@ -767,7 +767,7 @@ async function toggleFullscreen(){
 }
 function render(){
  refreshLiveHistory();
- document.body.classList.toggle('tv',isTV);$('eventTitle').textContent=state.title;
+ document.body.classList.toggle('tv',isTV);$('eventTitle').textContent='Endless Bonchones -- Domino';
  if(isTV&&!$('tvStage')){const stage=document.createElement('div');stage.id='tvStage';const header=document.querySelector('body>header'),shell=document.querySelector('body>.shell');document.body.insertBefore(stage,header);stage.append(header,shell);}
 
  $('headerActions').innerHTML=isTV?'<button id="fullscreen">Full screen</button><button id="tvToggle">Switch view</button>':['date','players'].includes(activeModule)?'':'<button id="tvOpen">Open TV display ↗</button><button id="export">Export backup</button><button id="import">Restore backup</button><input id="file" type="file" accept=".json,application/json" hidden>';
